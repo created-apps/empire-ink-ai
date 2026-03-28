@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Empire &amp; Ink — AI Mughal Art Studio</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☽</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: '#d4a82a', 'gold-light': '#f0cc58', 'gold-dim': '#a07a18',
+            cream: '#f0e4c8', 'cream-dim': '#c8b898',
+          },
+          fontFamily: {
+            display: ['"Playfair Display"', 'Georgia', 'serif'],
+            body:    ['"Crimson Text"', 'Georgia', 'serif'],
+          },
+        },
+      },
+    }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #0d0a07;
+      color: #f0e4c8;
+      font-family: 'Crimson Text', Georgia, serif;
+      overflow-x: hidden;
+    }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #1a1510; }
+    ::-webkit-scrollbar-thumb { background: #5a4a1a; border-radius: 3px; }
+
+    /* ── Grain texture overlay ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.4;
+    }
+
+    /* ── Ambient radial glow ── */
+    .hero-glow {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 40%, rgba(212,168,42,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 50% 15%, rgba(240,204,88,0.05) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* ── Floating particles ── */
+    .particles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .particle {
+      position: absolute;
+      width: 2px; height: 2px;
+      background: #d4a82a;
+      border-radius: 50%;
+      animation: particleRise linear infinite;
+      opacity: 0;
+    }
+    .particle::after {
+      content: '✦';
+      position: absolute;
+      font-size: 8px;
+      color: #d4a82a;
+      opacity: 0.6;
+      top: -3px; left: -3px;
+    }
+    @keyframes particleRise {
+      0%   { transform: translateY(0) translateX(0);    opacity: 0; }
+      10%  { opacity: 0.7; }
+      90%  { opacity: 0.3; }
+      100% { transform: translateY(-120vh) translateX(var(--drift)); opacity: 0; }
+    }
+    .particle:nth-child(1)  { left:  8%; bottom: 0; animation-duration: 12s; animation-delay: 0s;    --drift:  20px; }
+    .particle:nth-child(2)  { left: 18%; bottom: 0; animation-duration: 18s; animation-delay: 2s;    --drift: -15px; }
+    .particle:nth-child(3)  { left: 27%; bottom: 0; animation-duration: 14s; animation-delay: 4s;    --drift:  30px; }
+    .particle:nth-child(4)  { left: 38%; bottom: 0; animation-duration: 20s; animation-delay: 1s;    --drift: -25px; }
+    .particle:nth-child(5)  { left: 50%; bottom: 0; animation-duration: 16s; animation-delay: 6s;    --drift:  10px; }
+    .particle:nth-child(6)  { left: 62%; bottom: 0; animation-duration: 13s; animation-delay: 3s;    --drift: -30px; }
+    .particle:nth-child(7)  { left: 72%; bottom: 0; animation-duration: 19s; animation-delay: 5s;    --drift:  20px; }
+    .particle:nth-child(8)  { left: 83%; bottom: 0; animation-duration: 15s; animation-delay: 0.5s;  --drift: -10px; }
+    .particle:nth-child(9)  { left: 91%; bottom: 0; animation-duration: 17s; animation-delay: 7s;    --drift:  15px; }
+    .particle:nth-child(10) { left: 45%; bottom: 0; animation-duration: 22s; animation-delay: 9s;    --drift: -20px; }
+    .particle:nth-child(11) { left: 55%; bottom: 0; animation-duration: 11s; animation-delay: 1.5s;  --drift:  25px; }
+    .particle:nth-child(12) { left: 33%; bottom: 0; animation-duration: 24s; animation-delay: 8s;    --drift: -12px; }
+
+    /* ── Mughal arch SVG ── */
+    .arch-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -56%);
+      width: min(520px, 88vw);
+      height: auto;
+      pointer-events: none;
+      opacity: 0.18;
+      filter: drop-shadow(0 0 30px rgba(212,168,42,0.3));
+      animation: archBreath 6s ease-in-out infinite;
+    }
+    @keyframes archBreath {
+      0%, 100% { opacity: 0.18; filter: drop-shadow(0 0 30px rgba(212,168,42,0.3)); }
+      50%       { opacity: 0.24; filter: drop-shadow(0 0 50px rgba(212,168,42,0.45)); }
+    }
+
+    /* ── Hero text animations ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      animation: revealUp 0.9s cubic-bezier(0.22,1,0.36,1) forwards;
+    }
+    @keyframes revealUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .reveal-1 { animation-delay: 0.15s; }
+    .reveal-2 { animation-delay: 0.35s; }
+    .reveal-3 { animation-delay: 0.55s; }
+    .reveal-4 { animation-delay: 0.75s; }
+    .reveal-5 { animation-delay: 0.95s; }
+    .reveal-6 { animation-delay: 1.10s; }
+
+    /* ── Gold gradient text ── */
+    .text-gold-gradient {
+      background: linear-gradient(135deg, #a07a18 0%, #d4a82a 30%, #f0cc58 55%, #d4a82a 75%, #a07a18 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── Ornate divider ── */
+    .ornate-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: center;
+    }
+    .ornate-divider::before,
+    .ornate-divider::after {
+      content: '';
+      flex: 1;
+      max-width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #d4a82a);
+    }
+    .ornate-divider::after {
+      background: linear-gradient(90deg, #d4a82a, transparent);
+    }
+
+    /* ── Era cards ── */
+    .era-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #3a2e1a;
+      border-radius: 1rem;
+      background: #1a1510;
+      padding: 2rem 1.5rem;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+      cursor: default;
+    }
+    .era-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #d4a82a, transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .era-card:hover {
+      transform: translateY(-5px);
+      border-color: #5a4a1a;
+      box-shadow: 0 12px 40px rgba(212,168,42,0.12);
+    }
+    .era-card:hover::before { opacity: 1; }
+
+    /* ── Step cards ── */
+    .step-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 900;
+      line-height: 1;
+      background: linear-gradient(135deg, #3a2e1a, #5a4a1a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      user-select: none;
+    }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 32px;
+      border-radius: 12px;
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.03em;
+      background: linear-gradient(135deg, #a07a18, #d4a82a, #f0cc58, #d4a82a);
+      color: #0d0a07;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(212,168,42,0.35);
+      transition: box-shadow 0.2s ease, transform 0.15s ease;
+      text-decoration: none;
+    }
+    .btn-primary:hover {
+      box-shadow: 0 6px 32px rgba(212,168,42,0.55);
+      transform: translateY(-1px);
+    }
+    .btn-primary:active { transform: scale(0.97); }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 28px;
+      border-radius: 12px;
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.03em;
+      background: transparent;
+      color: #f0e4c8;
+      border: 1px solid #5a4a1a;
+      cursor: pointer;
+      transition: border-color 0.2s ease, color 0.2s ease, transform 0.15s ease, background 0.2s ease;
+      text-decoration: none;
+    }
+    .btn-outline:hover {
+      border-color: #d4a82a;
+      color: #f0cc58;
+      background: rgba(212,168,42,0.06);
+      transform: translateY(-1px);
+    }
+
+    /* ── Scroll indicator ── */
+    @keyframes scrollBounce {
+      0%, 100% { transform: translateY(0);  opacity: 0.6; }
+      50%       { transform: translateY(6px); opacity: 1; }
+    }
+    .scroll-indicator { animation: scrollBounce 2s ease-in-out infinite; }
+
+    /* ── Section fade-in on scroll ── */
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .scroll-reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Horizontal ornate border ── */
+    .section-border {
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, #3a2e1a 20%, #5a4a1a 50%, #3a2e1a 80%, transparent 100%);
+    }
+
+    /* ── Nav ── */
+    .landing-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      background: rgba(13,10,7,0.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(58,46,26,0.5);
+    }
+    .landing-nav::after {
+      content: '';
+      display: block;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #d4a82a 30%, #f0cc58 50%, #d4a82a 70%, transparent);
+      opacity: 0.5;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── Navigation ────────────────────────────────────────────────────────── -->
+  <nav class="landing-nav">
+    <div style="max-width:1200px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:64px;">
+      <a href="/" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
+        <span style="font-size:1.6rem;filter:drop-shadow(0 0 8px rgba(212,168,42,0.7));">☽</span>
+        <span class="text-gold-gradient" style="font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:600;letter-spacing:0.04em;">Empire &amp; Ink</span>
+      </a>
+      <div style="display:flex;align-items:center;gap:8px;" id="nav-actions">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── Hero Section ──────────────────────────────────────────────────────── -->
+  <section style="position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5rem 1.5rem 4rem;overflow:hidden;">
+
+    <!-- Ambient glow -->
+    <div class="hero-glow"></div>
+
+    <!-- Particles -->
+    <div class="particles" aria-hidden="true">
+      <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+      <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+      <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+      <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+    </div>
+
+    <!-- Mughal Arch SVG -->
+    <div class="arch-container" aria-hidden="true">
+      <svg viewBox="0 0 400 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Outer rectangular frame -->
+        <rect x="10" y="10" width="380" height="500" rx="2" stroke="#d4a82a" stroke-width="1.5" opacity="0.7"/>
+        <rect x="18" y="18" width="364" height="484" rx="1" stroke="#d4a82a" stroke-width="0.5" opacity="0.4"/>
+
+        <!-- Corner ornaments -->
+        <path d="M10,10 Q10,30 30,30" stroke="#d4a82a" stroke-width="1.5" opacity="0.8"/>
+        <path d="M390,10 Q390,30 370,30" stroke="#d4a82a" stroke-width="1.5" opacity="0.8"/>
+        <path d="M10,510 Q10,490 30,490" stroke="#d4a82a" stroke-width="1.5" opacity="0.8"/>
+        <path d="M390,510 Q390,490 370,490" stroke="#d4a82a" stroke-width="1.5" opacity="0.8"/>
+        <circle cx="10" cy="10" r="3" fill="#d4a82a" opacity="0.9"/>
+        <circle cx="390" cy="10" r="3" fill="#d4a82a" opacity="0.9"/>
+        <circle cx="10" cy="510" r="3" fill="#d4a82a" opacity="0.9"/>
+        <circle cx="390" cy="510" r="3" fill="#d4a82a" opacity="0.9"/>
+
+        <!-- Mughal pointed arch shape -->
+        <!-- Left pier -->
+        <rect x="60" y="320" width="60" height="180" rx="2" stroke="#d4a82a" stroke-width="1.2" opacity="0.8"/>
+        <!-- Right pier -->
+        <rect x="280" y="320" width="60" height="180" rx="2" stroke="#d4a82a" stroke-width="1.2" opacity="0.8"/>
+
+        <!-- Arch curve — pointed Mughal profile -->
+        <path d="M60,320 C60,200 90,100 200,60 C310,100 340,200 340,320" stroke="#d4a82a" stroke-width="2" opacity="0.9"/>
+        <!-- Inner arch offset -->
+        <path d="M75,320 C75,210 103,115 200,78 C297,115 325,210 325,320" stroke="#d4a82a" stroke-width="0.8" opacity="0.5"/>
+
+        <!-- Trefoil at apex -->
+        <circle cx="200" cy="62" r="14" stroke="#d4a82a" stroke-width="1.2" opacity="0.9"/>
+        <circle cx="200" cy="62" r="8"  stroke="#d4a82a" stroke-width="0.6" opacity="0.6"/>
+        <circle cx="200" cy="62" r="3"  fill="#d4a82a" opacity="0.8"/>
+
+        <!-- Spandrel decorations (left) -->
+        <path d="M30,320 Q30,200 60,120" stroke="#d4a82a" stroke-width="0.6" opacity="0.3"/>
+        <circle cx="35" cy="200" r="4" stroke="#d4a82a" stroke-width="0.8" opacity="0.4"/>
+        <circle cx="38" cy="250" r="3" stroke="#d4a82a" stroke-width="0.8" opacity="0.3"/>
+        <!-- Spandrel decorations (right) -->
+        <path d="M370,320 Q370,200 340,120" stroke="#d4a82a" stroke-width="0.6" opacity="0.3"/>
+        <circle cx="365" cy="200" r="4" stroke="#d4a82a" stroke-width="0.8" opacity="0.4"/>
+        <circle cx="362" cy="250" r="3" stroke="#d4a82a" stroke-width="0.8" opacity="0.3"/>
+
+        <!-- Horizontal band above arch base -->
+        <line x1="30" y1="320" x2="370" y2="320" stroke="#d4a82a" stroke-width="1" opacity="0.6"/>
+        <line x1="30" y1="328" x2="370" y2="328" stroke="#d4a82a" stroke-width="0.4" opacity="0.3"/>
+
+        <!-- Decorative panels in piers -->
+        <rect x="68" y="335" width="44" height="55" rx="3" stroke="#d4a82a" stroke-width="0.8" opacity="0.5"/>
+        <rect x="288" y="335" width="44" height="55" rx="3" stroke="#d4a82a" stroke-width="0.8" opacity="0.5"/>
+
+        <!-- Central lotus medallion inside arch -->
+        <circle cx="200" cy="220" r="36" stroke="#d4a82a" stroke-width="0.8" opacity="0.4"/>
+        <circle cx="200" cy="220" r="26" stroke="#d4a82a" stroke-width="0.6" opacity="0.35"/>
+        <circle cx="200" cy="220" r="8"  stroke="#d4a82a" stroke-width="0.8" opacity="0.5"/>
+        <!-- Lotus petals (8-pointed star) -->
+        <path d="M200,184 L205,212 L200,220 L195,212 Z" stroke="#d4a82a" stroke-width="0.6" opacity="0.4"/>
+        <path d="M200,256 L205,228 L200,220 L195,228 Z" stroke="#d4a82a" stroke-width="0.6" opacity="0.4"/>
+        <path d="M164,220 L192,215 L200,220 L192,225 Z" stroke="#d4a82a" stroke-width="0.6" opacity="0.4"/>
+        <path d="M236,220 L208,215 L200,220 L208,225 Z" stroke="#d4a82a" stroke-width="0.6" opacity="0.4"/>
+        <path d="M175,185 L198,210 L200,220 L190,213 Z" stroke="#d4a82a" stroke-width="0.6" opacity="0.35"/>
+        <path d="M225,185 L202,210 L200,220 L210,213 Z" stroke="#d4a82a" stroke-width="0.6" opacity="0.35"/>
+        <path d="M175,255 L198,230 L200,220 L190,227 Z" stroke="#d4a82a" stroke-width="0.6" opacity="0.35"/>
+        <path d="M225,255 L202,230 L200,220 L210,227 Z" stroke="#d4a82a" stroke-width="0.6" opacity="0.35"/>
+
+        <!-- Jaali (lattice) fill suggestion inside arch -->
+        <path d="M100,300 L300,300 M100,280 L300,280 M100,260 L300,260" stroke="#d4a82a" stroke-width="0.3" opacity="0.2" stroke-dasharray="4,6"/>
+        <path d="M130,260 L130,300 M160,260 L160,300 M190,260 L190,300 M220,260 L220,300 M250,260 L250,300 M280,260 L280,300" stroke="#d4a82a" stroke-width="0.3" opacity="0.2" stroke-dasharray="4,6"/>
+
+        <!-- Top crescent finial -->
+        <path d="M196,44 Q200,32 204,44" stroke="#d4a82a" stroke-width="1.5" opacity="0.9" fill="none"/>
+        <circle cx="200" cy="42" r="2" fill="#d4a82a" opacity="0.9"/>
+        <line x1="200" y1="40" x2="200" y2="28" stroke="#d4a82a" stroke-width="1" opacity="0.7"/>
+        <path d="M196,30 Q200,22 204,30" stroke="#d4a82a" stroke-width="1" opacity="0.6" fill="none"/>
+      </svg>
+    </div>
+
+    <!-- Hero content -->
+    <div style="position:relative;z-index:2;text-align:center;max-width:780px;margin:0 auto;">
+
+      <!-- Eyebrow -->
+      <div class="reveal reveal-1" style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:1.5rem;">
+        <div style="height:1px;width:48px;background:linear-gradient(90deg,transparent,#d4a82a);"></div>
+        <span style="font-family:'Crimson Text',serif;font-size:0.85rem;letter-spacing:0.2em;color:#a07a18;text-transform:uppercase;">CreatED Studios &times; Times of India</span>
+        <div style="height:1px;width:48px;background:linear-gradient(90deg,#d4a82a,transparent);"></div>
+      </div>
+
+      <!-- Main title -->
+      <h1 class="reveal reveal-2 text-gold-gradient" style="font-family:'Playfair Display',serif;font-size:clamp(3rem,9vw,6.5rem);font-weight:900;line-height:0.95;letter-spacing:-0.01em;margin-bottom:1.5rem;">
+        Empire<br/><span style="font-style:italic;">&amp; Ink</span>
+      </h1>
+
+      <!-- Ornate divider -->
+      <div class="reveal reveal-3 ornate-divider" style="margin:0 auto 1.5rem;max-width:300px;">
+        <span style="color:#d4a82a;font-size:1rem;">✦</span>
+      </div>
+
+      <!-- Tagline -->
+      <p class="reveal reveal-3" style="font-family:'Playfair Display',serif;font-size:clamp(1.1rem,2.5vw,1.5rem);font-style:italic;color:#c8b898;margin-bottom:0.75rem;letter-spacing:0.01em;">
+        Where History Meets the Future
+      </p>
+      <p class="reveal reveal-4" style="font-family:'Crimson Text',serif;font-size:clamp(0.95rem,2vw,1.15rem);color:#8a7a60;max-width:520px;margin:0 auto 2.5rem;line-height:1.7;">
+        Generate and transform images into authentic Mughal miniature paintings
+        using Google Gemini AI — in the style of the great Mughal emperors.
+      </p>
+
+      <!-- CTAs -->
+      <div class="reveal reveal-5" style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-bottom:3rem;">
+        <a id="cta-studio" href="/studio" class="btn-primary">✦ Enter the Studio</a>
+        <a href="/gallery" class="btn-outline">View Gallery</a>
+      </div>
+
+      <!-- Scroll indicator -->
+      <div class="reveal reveal-6 scroll-indicator" style="display:flex;flex-direction:column;align-items:center;gap:6px;color:#5a4a1a;">
+        <span style="font-family:'Crimson Text',serif;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;">Explore</span>
+        <svg width="16" height="22" viewBox="0 0 16 22" fill="none">
+          <rect x="1" y="1" width="14" height="20" rx="7" stroke="#5a4a1a" stroke-width="1.2"/>
+          <circle cx="8" cy="7" r="2.5" fill="#d4a82a" opacity="0.7">
+            <animate attributeName="cy" values="7;13;7" dur="2s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.7;0.2;0.7" dur="2s" repeatCount="indefinite"/>
+          </circle>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Section divider ───────────────────────────────────────────────────── -->
+  <div class="section-border"></div>
+
+  <!-- ── Three Eras Section ────────────────────────────────────────────────── -->
+  <section style="padding:5rem 1.5rem;max-width:1100px;margin:0 auto;" class="scroll-reveal">
+    <div style="text-align:center;margin-bottom:3.5rem;">
+      <p style="font-family:'Crimson Text',serif;font-size:0.8rem;letter-spacing:0.2em;text-transform:uppercase;color:#a07a18;margin-bottom:0.75rem;">Three Dynasties · One Canvas</p>
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:700;color:#f0e4c8;line-height:1.2;">
+        Choose Your Imperial Era
+      </h2>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;">
+
+      <!-- Akbari -->
+      <div class="era-card">
+        <div style="font-size:2.5rem;margin-bottom:1rem;">🏛️</div>
+        <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:0.4rem;">
+          <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:#f0e4c8;">Akbari</h3>
+          <span style="font-family:'Crimson Text',serif;font-size:0.8rem;color:#5a4a1a;">1556–1605</span>
+        </div>
+        <p style="font-family:'Crimson Text',serif;font-size:1rem;color:#c8b898;line-height:1.65;margin-bottom:1.2rem;">
+          Bold outlines and Persian influence define this era. Compositions teem with energy — jewel-toned scenes of imperial hunts, royal courts, and mythological battles.
+        </p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          <span style="padding:3px 10px;border-radius:20px;border:1px solid #3a2e1a;font-family:'Crimson Text',serif;font-size:0.8rem;color:#8a7a60;">Jewel Tones</span>
+          <span style="padding:3px 10px;border-radius:20px;border:1px solid #3a2e1a;font-family:'Crimson Text',serif;font-size:0.8rem;color:#8a7a60;">Persian Style</span>
+          <span style="padding:3px 10px;border-radius:20px;border:1px solid #3a2e1a;font-family:'Crimson Text',serif;font-size:0.8rem;color:#8a7a60;">Bold Outlines</span>
+        </div>
+      </div>
+
+      <!-- Jahangiri -->
+      <div class="era-card" style="border-color:#3a3018;">
+        <div style="font-size:2.5rem;margin-bottom:1rem;">🌿</div>
+        <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:0.4rem;">
+          <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:#f0e4c8;">Jahangiri</h3>
+          <span style="font-family:'Crimson Text',serif;font-size:0.8rem;color:#5a4a1a;">1605–1627</span>
+        </div>
+        <p style="font-family:'Crimson Text',serif;font-size:1rem;color:#c8b898;line-height:1.65;margin-bottom:1.2rem;">
+          Naturalism reigns supreme. Delicate botanical motifs, fine animal studies, and pastel palettes illuminated with gold leaf borders — art as observation.
+        </p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          <span style="padding:3px 10px;border-radius:20px;border:1px solid #3a2e1a;font-family:'Crimson Text',serif;font-size:0.8rem;color:#8a7a60;">Botanical</span>
+          <span style="padding:3px 10px;border-radius:20px;border:1px solid #3a2e1a;font-family:'Crimson Text',serif;font-size:0.8rem;color:#8a7a60;">Pastel Palette</span>
+          <span style="padding:3px 10px;border-radius:20px;border:1px solid #3a2e1a;font-family:'Crimson Text',serif;font-size:0.8rem;color:#8a7a60;">Gold Leaf</span>
+        </div>
+      </div>
+
+      <!-- Shahjahani -->
+      <div class="era-card">
+        <div style="font-size:2.5rem;margin-bottom:1rem;">🕌</div>
+        <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:0.4rem;">
+          <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:#f0e4c8;">Shahjahani</h3>
+          <span style="font-family:'Crimson Text',serif;font-size:0.8rem;color:#5a4a1a;">1628–1658</span>
+        </div>
+        <p style="font-family:'Crimson Text',serif;font-size:1rem;color:#c8b898;line-height:1.65;margin-bottom:1.2rem;">
+          The white marble aesthetic. Refined symmetry, opulent floral borders, and muted jewel tones — the pinnacle of Mughal refinement under the builder of the Taj Mahal.
+        </p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          <span style="padding:3px 10px;border-radius:20px;border:1px solid #3a2e1a;font-family:'Crimson Text',serif;font-size:0.8rem;color:#8a7a60;">Marble White</span>
+          <span style="padding:3px 10px;border-radius:20px;border:1px solid #3a2e1a;font-family:'Crimson Text',serif;font-size:0.8rem;color:#8a7a60;">Symmetry</span>
+          <span style="padding:3px 10px;border-radius:20px;border:1px solid #3a2e1a;font-family:'Crimson Text',serif;font-size:0.8rem;color:#8a7a60;">Opulent</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Section divider ───────────────────────────────────────────────────── -->
+  <div class="section-border"></div>
+
+  <!-- ── How It Works ──────────────────────────────────────────────────────── -->
+  <section style="padding:5rem 1.5rem;max-width:900px;margin:0 auto;" class="scroll-reveal">
+    <div style="text-align:center;margin-bottom:3.5rem;">
+      <p style="font-family:'Crimson Text',serif;font-size:0.8rem;letter-spacing:0.2em;text-transform:uppercase;color:#a07a18;margin-bottom:0.75rem;">Simple as Royal Command</p>
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:700;color:#f0e4c8;line-height:1.2;">
+        How It Works
+      </h2>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem;align-items:start;">
+
+      <div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:2rem 1.5rem;border-radius:1rem;background:#1a1510;border:1px solid #2a2318;">
+        <div class="step-number">I</div>
+        <div style="font-size:2rem;margin:1rem 0;">✍️</div>
+        <h4 style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;color:#f0e4c8;margin-bottom:0.5rem;">Describe or Upload</h4>
+        <p style="font-family:'Crimson Text',serif;font-size:0.95rem;color:#8a7a60;line-height:1.65;">
+          Type a scene from your imagination or upload any photograph you'd like transformed.
+        </p>
+      </div>
+
+      <div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:2rem 1.5rem;border-radius:1rem;background:#1a1510;border:1px solid #2a2318;">
+        <div class="step-number">II</div>
+        <div style="font-size:2rem;margin:1rem 0;">🎨</div>
+        <h4 style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;color:#f0e4c8;margin-bottom:0.5rem;">Choose Your Era</h4>
+        <p style="font-family:'Crimson Text',serif;font-size:0.95rem;color:#8a7a60;line-height:1.65;">
+          Select from three authentic Mughal painting styles — each with its own palette, technique, and history.
+        </p>
+      </div>
+
+      <div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:2rem 1.5rem;border-radius:1rem;background:#1a1510;border:1px solid #2a2318;">
+        <div class="step-number">III</div>
+        <div style="font-size:2rem;margin:1rem 0;">✨</div>
+        <h4 style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;color:#f0e4c8;margin-bottom:0.5rem;">AI Creates Your Art</h4>
+        <p style="font-family:'Crimson Text',serif;font-size:0.95rem;color:#8a7a60;line-height:1.65;">
+          Google Gemini AI transforms your vision into an authentic Mughal miniature, saved to your royal gallery.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Section divider ───────────────────────────────────────────────────── -->
+  <div class="section-border"></div>
+
+  <!-- ── Final CTA ─────────────────────────────────────────────────────────── -->
+  <section style="padding:6rem 1.5rem;text-align:center;" class="scroll-reveal">
+    <div style="font-size:3rem;margin-bottom:1.5rem;filter:drop-shadow(0 0 20px rgba(212,168,42,0.4));">☽</div>
+    <h2 style="font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;color:#f0e4c8;margin-bottom:0.75rem;">
+      Begin Your Royal Journey
+    </h2>
+    <p style="font-family:'Crimson Text',serif;font-size:1.1rem;color:#8a7a60;max-width:420px;margin:0 auto 2.5rem;line-height:1.7;">
+      Join the studio. Your first masterpiece awaits.
+    </p>
+    <a id="cta-bottom" href="/studio" class="btn-primary" style="font-size:1.05rem;padding:16px 40px;">
+      ✦ Enter the Studio
+    </a>
+  </section>
+
+  <!-- ── Footer ────────────────────────────────────────────────────────────── -->
+  <footer style="border-top:1px solid #1a1510;padding:2rem 1.5rem;text-align:center;">
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:0.5rem;">
+      <span style="color:#d4a82a;opacity:0.5;">☽</span>
+      <span style="font-family:'Crimson Text',serif;font-size:0.9rem;color:#5a4a1a;">Empire &amp; Ink — AI Mughal Miniature Studio</span>
+      <span style="color:#d4a82a;opacity:0.5;">☽</span>
+    </div>
+    <p style="font-family:'Crimson Text',serif;font-size:0.8rem;color:#3a2e1a;">CreatED Studios &times; Times of India</p>
+  </footer>
+
+  <script>
+    // ── Navbar: adapt to auth state ──────────────────────────────────────────
+    (function() {
+      const token = localStorage.getItem('ei_token');
+      const email = localStorage.getItem('ei_email');
+      const nav   = document.getElementById('nav-actions');
+      if (token && email) {
+        nav.innerHTML = `
+          <span style="font-family:'Crimson Text',serif;font-size:0.85rem;color:#8a7a60;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${email}</span>
+          <a href="/studio" class="btn-primary" style="padding:8px 20px;font-size:0.85rem;">✦ Studio</a>
+        `;
+        // Also update hero CTAs
+        const ctaStudio = document.getElementById('cta-studio');
+        const ctaBottom = document.getElementById('cta-bottom');
+        if (ctaStudio) ctaStudio.href = '/studio';
+        if (ctaBottom) ctaBottom.href = '/studio';
+      } else {
+        nav.innerHTML = `
+          <a href="/login" style="padding:8px 18px;font-family:'Playfair Display',serif;font-size:0.85rem;font-weight:600;color:#c8b898;text-decoration:none;border:1px solid transparent;border-radius:8px;transition:all 0.2s;"
+             onmouseover="this.style.borderColor='#5a4a1a';this.style.color='#f0e4c8'"
+             onmouseout="this.style.borderColor='transparent';this.style.color='#c8b898'">Sign In</a>
+          <a href="/register" class="btn-primary" style="padding:8px 18px;font-size:0.85rem;">Get Started</a>
+        `;
+      }
+    })();
+
+    // ── Scroll reveal ────────────────────────────────────────────────────────
+    (function() {
+      const els = document.querySelectorAll('.scroll-reveal');
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            obs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      els.forEach(el => obs.observe(el));
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account — Empire & Ink</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☽</text></svg>" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg:      '#0d0a07',
+            surface: '#1a1510',
+            card:    '#231e14',
+            gold:    '#d4a82a',
+            'gold-light': '#f0cc58',
+            'gold-dim':   '#a07a18',
+            cream:   '#f0e4c8',
+            'cream-dim':  '#c8b898',
+            border:  '#3a2e1a',
+            'border-gold': '#5a4a1a',
+          },
+          fontFamily: {
+            display: ['"Playfair Display"', 'Georgia', 'serif'],
+            body:    ['"Crimson Text"', 'Georgia', 'serif'],
+          },
+        },
+      },
+    }
+  </script>
+
+  <style>
+    body { background-color: #0d0a07; color: #f0e4c8; font-family: 'Crimson Text', Georgia, serif; }
+    h1, h2, h3 { font-family: 'Playfair Display', Georgia, serif; }
+
+    .text-gold-gradient {
+      background: linear-gradient(135deg, #d4a82a 0%, #f0cc58 50%, #d4a82a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    input:focus { outline: none; border-color: #d4a82a !important; box-shadow: 0 0 0 2px rgba(212,168,42,0.2); }
+
+    .arch-bg {
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 2 Q42 12 42 30 Q42 48 30 58 Q18 48 18 30 Q18 12 30 2Z' fill='none' stroke='%23d4a82a' stroke-width='0.5' opacity='0.07'/%3E%3C/svg%3E");
+    }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-in { animation: fadeIn 0.5s ease forwards; }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #1a1510; }
+    ::-webkit-scrollbar-thumb { background: #5a4a1a; border-radius: 3px; }
+  </style>
+</head>
+
+<body class="min-h-screen arch-bg flex flex-col items-center justify-center px-4 py-12">
+
+  <!-- Decorative top border -->
+  <div class="fixed top-0 left-0 right-0 h-1" style="background:linear-gradient(90deg,transparent,#d4a82a 30%,#f0cc58 50%,#d4a82a 70%,transparent);"></div>
+
+  <div class="fade-in w-full max-w-md">
+
+    <!-- Decorative header -->
+    <div class="text-center mb-8">
+      <div class="text-6xl mb-3" style="filter:drop-shadow(0 0 20px rgba(212,168,42,0.5));line-height:1;">☽</div>
+      <h1 class="font-display text-4xl font-bold text-gold-gradient tracking-wide mb-2">Empire &amp; Ink</h1>
+      <p class="font-body text-cream-dim text-lg italic">The Royal Art Studio</p>
+      <div class="flex items-center justify-center gap-3 mt-4 opacity-60">
+        <div class="h-px w-16" style="background:linear-gradient(90deg,transparent,#d4a82a);"></div>
+        <span class="text-gold text-xs">✦</span>
+        <div class="h-px w-16" style="background:linear-gradient(90deg,#d4a82a,transparent);"></div>
+      </div>
+    </div>
+
+    <!-- Form card -->
+    <div class="rounded-xl border p-8" style="background:#1a1510;border-color:#3a2e1a;box-shadow:0 8px 40px rgba(0,0,0,0.6),0 0 0 1px rgba(212,168,42,0.08);">
+
+      <h2 class="font-display text-2xl font-semibold text-cream mb-1">Join the Studio</h2>
+      <p class="font-body text-cream-dim text-base mb-6">Create your royal account</p>
+
+      <!-- Error message -->
+      <div id="error-msg" class="hidden mb-4 px-4 py-3 rounded-lg border text-sm font-body"
+           style="background:rgba(139,26,42,0.2);border-color:rgba(139,26,42,0.6);color:#fca5a5;">
+      </div>
+
+      <!-- Success / confirmation message -->
+      <div id="success-msg" class="hidden mb-4 px-4 py-3 rounded-lg border text-sm font-body"
+           style="background:rgba(13,110,110,0.2);border-color:rgba(13,110,110,0.6);color:#6ee7b7;">
+      </div>
+
+      <form id="register-form" novalidate>
+        <!-- Email -->
+        <div class="mb-4">
+          <label for="email" class="block text-sm font-body text-cream-dim mb-1.5">Email Address</label>
+          <input
+            type="email" id="email" name="email" autocomplete="email" required
+            placeholder="you@example.com"
+            class="w-full px-4 py-2.5 rounded-lg border font-body text-cream placeholder-cream-dim/40 text-base transition-colors duration-200"
+            style="background:#0d0a07;border-color:#3a2e1a;"
+          />
+        </div>
+
+        <!-- Password -->
+        <div class="mb-4">
+          <label for="password" class="block text-sm font-body text-cream-dim mb-1.5">Password</label>
+          <input
+            type="password" id="password" name="password" autocomplete="new-password" required
+            placeholder="At least 8 characters"
+            class="w-full px-4 py-2.5 rounded-lg border font-body text-cream placeholder-cream-dim/40 text-base transition-colors duration-200"
+            style="background:#0d0a07;border-color:#3a2e1a;"
+          />
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="mb-6">
+          <label for="confirm-password" class="block text-sm font-body text-cream-dim mb-1.5">Confirm Password</label>
+          <input
+            type="password" id="confirm-password" name="confirm_password" autocomplete="new-password" required
+            placeholder="••••••••"
+            class="w-full px-4 py-2.5 rounded-lg border font-body text-cream placeholder-cream-dim/40 text-base transition-colors duration-200"
+            style="background:#0d0a07;border-color:#3a2e1a;"
+          />
+        </div>
+
+        <!-- Submit -->
+        <button
+          type="submit" id="submit-btn"
+          class="w-full py-3 rounded-lg font-display font-semibold text-base tracking-wide transition-all duration-200 active:scale-95"
+          style="background:linear-gradient(135deg,#a07a18,#d4a82a,#f0cc58,#d4a82a);color:#0d0a07;box-shadow:0 4px 20px rgba(212,168,42,0.35);"
+          onmouseover="this.style.boxShadow='0 6px 28px rgba(212,168,42,0.5)'"
+          onmouseout="this.style.boxShadow='0 4px 20px rgba(212,168,42,0.35)'"
+        >
+          Create Account
+        </button>
+      </form>
+
+      <!-- Divider -->
+      <div class="flex items-center gap-3 my-6 opacity-40">
+        <div class="flex-1 h-px" style="background:#3a2e1a;"></div>
+        <span class="text-gold-dim text-xs">✦</span>
+        <div class="flex-1 h-px" style="background:#3a2e1a;"></div>
+      </div>
+
+      <!-- Login link -->
+      <p class="text-center font-body text-cream-dim text-base">
+        Already have an account?
+        <a href="/login" class="text-gold hover:text-gold-light transition-colors duration-200 ml-1">Sign in</a>
+      </p>
+    </div>
+
+  </div>
+
+  <!-- Decorative bottom border -->
+  <div class="fixed bottom-0 left-0 right-0 h-1" style="background:linear-gradient(90deg,transparent,#d4a82a 30%,#f0cc58 50%,#d4a82a 70%,transparent);opacity:0.4;"></div>
+
+  <script>
+    const Auth = {
+      getToken: () => localStorage.getItem('ei_token'),
+      setSession: (token, userId, email) => {
+        localStorage.setItem('ei_token', token);
+        localStorage.setItem('ei_user_id', userId);
+        localStorage.setItem('ei_email', email);
+      },
+    };
+
+    // Redirect if already logged in
+    if (Auth.getToken()) {
+      window.location.href = '/studio';
+    }
+
+    document.getElementById('register-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const email    = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const confirm  = document.getElementById('confirm-password').value;
+      const btn      = document.getElementById('submit-btn');
+      const errEl    = document.getElementById('error-msg');
+      const succEl   = document.getElementById('success-msg');
+
+      errEl.classList.add('hidden');
+      succEl.classList.add('hidden');
+
+      // Validation
+      if (!email || !password || !confirm) {
+        showError('Please fill in all fields.');
+        return;
+      }
+      if (password.length < 8) {
+        showError('Password must be at least 8 characters.');
+        return;
+      }
+      if (password !== confirm) {
+        showError('Passwords do not match.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Creating account…';
+      btn.style.opacity = '0.8';
+
+      try {
+        const resp = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const data = await resp.json();
+
+        if (!resp.ok) {
+          showError(data.detail || 'Registration failed. Please try again.');
+          return;
+        }
+
+        if (data.needs_confirmation) {
+          // Email confirmation required
+          succEl.textContent = 'Account created! Please check your email to confirm your address, then sign in.';
+          succEl.classList.remove('hidden');
+          document.getElementById('register-form').style.opacity = '0.5';
+          document.getElementById('register-form').style.pointerEvents = 'none';
+          setTimeout(() => { window.location.href = '/login'; }, 3500);
+          return;
+        }
+
+        // Immediate session — store and redirect
+        Auth.setSession(data.access_token, data.user_id, data.email);
+        window.location.href = '/studio';
+
+      } catch (err) {
+        showError('Network error. Please try again.');
+      } finally {
+        if (!succEl.classList.contains('hidden') === false) {
+          btn.disabled = false;
+          btn.textContent = 'Create Account';
+          btn.style.opacity = '1';
+        }
+      }
+    });
+
+    function showError(msg) {
+      const el = document.getElementById('error-msg');
+      el.textContent = msg;
+      el.classList.remove('hidden');
+      document.getElementById('submit-btn').disabled = false;
+      document.getElementById('submit-btn').textContent = 'Create Account';
+      document.getElementById('submit-btn').style.opacity = '1';
+    }
+  </script>
+</body>
+</html>

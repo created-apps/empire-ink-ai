@@ -1,0 +1,442 @@
+{% extends "base.html" %}
+
+{% block title %}The Royal Art Studio — Empire & Ink{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+  <!-- Page header -->
+  <div class="text-center mb-10">
+    <h1 class="font-display text-4xl sm:text-5xl font-bold mb-3" style="background:linear-gradient(135deg,#d4a82a,#f0cc58,#d4a82a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+      The Royal Art Studio
+    </h1>
+    <p class="font-body text-cream-dim text-lg italic">Transform your imagination into Mughal miniature art</p>
+    <!-- Ornament -->
+    <div class="flex items-center justify-center gap-3 mt-4 opacity-50">
+      <div class="h-px w-20" style="background:linear-gradient(90deg,transparent,#d4a82a);"></div>
+      <span class="text-gold text-sm">✦</span>
+      <div class="h-px w-20" style="background:linear-gradient(90deg,#d4a82a,transparent);"></div>
+    </div>
+  </div>
+
+  <!-- Tab switcher -->
+  <div class="flex rounded-xl p-1 mb-8 mx-auto max-w-sm" style="background:#1a1510;border:1px solid #3a2e1a;">
+    <button id="tab-generate-btn" onclick="switchTab('generate')"
+            class="flex-1 py-2.5 px-4 rounded-lg font-display text-sm font-semibold tracking-wide transition-all duration-200">
+      ✦ Generate Art
+    </button>
+    <button id="tab-transform-btn" onclick="switchTab('transform')"
+            class="flex-1 py-2.5 px-4 rounded-lg font-display text-sm font-semibold tracking-wide transition-all duration-200">
+      ⟳ Transform Photo
+    </button>
+  </div>
+
+  <!-- ── Generate Tab ─────────────────────────────────────────────────── -->
+  <div id="tab-generate" class="tab-panel">
+    <div class="rounded-xl border p-6 sm:p-8" style="background:#1a1510;border-color:#3a2e1a;box-shadow:0 4px 24px rgba(0,0,0,0.4);">
+
+      <!-- Prompt input -->
+      <div class="mb-6">
+        <label for="gen-prompt" class="block font-display text-base font-semibold text-cream mb-2">
+          Describe your vision
+        </label>
+        <p class="font-body text-cream-dim text-sm mb-3">
+          Describe a scene, person, or idea — our AI will craft it in the Mughal miniature style.
+        </p>
+        <textarea
+          id="gen-prompt"
+          rows="4"
+          placeholder="e.g. A royal elephant procession crossing a jewelled river at sunset, with courtiers watching from ornate balconies…"
+          class="w-full px-4 py-3 rounded-lg border font-body text-cream placeholder-cream-dim/40 text-base resize-none transition-colors duration-200"
+          style="background:#0d0a07;border-color:#3a2e1a;line-height:1.6;"
+        ></textarea>
+        <div class="flex justify-end mt-1">
+          <span id="gen-char-count" class="text-xs font-body text-cream-dim opacity-50">0 / 500</span>
+        </div>
+      </div>
+
+      <!-- Style preset -->
+      <div class="mb-8">
+        <label class="block font-display text-base font-semibold text-cream mb-3">Choose Your Style</label>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="gen-style-grid">
+          <!-- Akbari -->
+          <div class="style-card cursor-pointer rounded-xl border p-4 transition-all duration-200 relative overflow-hidden"
+               data-style="akbari" onclick="selectStyle('generate', 'akbari')"
+               style="background:#231e14;border-color:#3a2e1a;">
+            <div class="absolute top-0 left-0 right-0 h-0.5 opacity-0 transition-opacity" id="gen-akbari-bar"
+                 style="background:linear-gradient(90deg,transparent,#d4a82a,transparent);"></div>
+            <div class="text-2xl mb-2">🏛️</div>
+            <div class="font-display text-sm font-semibold text-cream mb-1">Akbari</div>
+            <div class="text-xs font-body text-cream-dim leading-relaxed">Bold outlines · Persian influence · Jewel tones</div>
+            <div class="text-xs font-body opacity-40 mt-1.5 text-cream-dim">1556–1605</div>
+          </div>
+          <!-- Jahangiri -->
+          <div class="style-card cursor-pointer rounded-xl border p-4 transition-all duration-200 relative overflow-hidden"
+               data-style="jahangiri" onclick="selectStyle('generate', 'jahangiri')"
+               style="background:#231e14;border-color:#3a2e1a;">
+            <div class="absolute top-0 left-0 right-0 h-0.5 opacity-0 transition-opacity" id="gen-jahangiri-bar"
+                 style="background:linear-gradient(90deg,transparent,#d4a82a,transparent);"></div>
+            <div class="text-2xl mb-2">🌿</div>
+            <div class="font-display text-sm font-semibold text-cream mb-1">Jahangiri</div>
+            <div class="text-xs font-body text-cream-dim leading-relaxed">Naturalistic detail · Botanical motifs · Pastel palette</div>
+            <div class="text-xs font-body opacity-40 mt-1.5 text-cream-dim">1605–1627</div>
+          </div>
+          <!-- Shahjahani -->
+          <div class="style-card cursor-pointer rounded-xl border p-4 transition-all duration-200 relative overflow-hidden"
+               data-style="shahjahani" onclick="selectStyle('generate', 'shahjahani')"
+               style="background:#231e14;border-color:#3a2e1a;">
+            <div class="absolute top-0 left-0 right-0 h-0.5 opacity-0 transition-opacity" id="gen-shahjahani-bar"
+                 style="background:linear-gradient(90deg,transparent,#d4a82a,transparent);"></div>
+            <div class="text-2xl mb-2">🕌</div>
+            <div class="font-display text-sm font-semibold text-cream mb-1">Shahjahani</div>
+            <div class="text-xs font-body text-cream-dim leading-relaxed">White marble aesthetic · Refined symmetry · Opulent borders</div>
+            <div class="text-xs font-body opacity-40 mt-1.5 text-cream-dim">1628–1658</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress steps (hidden by default) -->
+      <div id="gen-progress" class="hidden mb-6 rounded-xl border p-6 text-center" style="background:#0d0a07;border-color:#5a4a1a;">
+        <div class="text-3xl mb-3" id="gen-progress-icon">✦</div>
+        <p id="gen-progress-text" class="font-display text-lg font-semibold text-gold mb-2">Enhancing your vision…</p>
+        <div class="flex justify-center gap-1.5 mt-3">
+          <div id="step-dot-1" class="w-2 h-2 rounded-full transition-colors duration-300" style="background:#d4a82a;"></div>
+          <div id="step-dot-2" class="w-2 h-2 rounded-full transition-colors duration-300" style="background:#3a2e1a;"></div>
+          <div id="step-dot-3" class="w-2 h-2 rounded-full transition-colors duration-300" style="background:#3a2e1a;"></div>
+        </div>
+      </div>
+
+      <!-- Generate button -->
+      <button id="gen-btn" onclick="generateArt()"
+              class="w-full py-3.5 rounded-xl font-display font-semibold text-base tracking-wide transition-all duration-200 active:scale-95"
+              style="background:linear-gradient(135deg,#a07a18,#d4a82a,#f0cc58,#d4a82a);color:#0d0a07;box-shadow:0 4px 20px rgba(212,168,42,0.35);"
+              onmouseover="this.style.boxShadow='0 6px 28px rgba(212,168,42,0.5)'"
+              onmouseout="this.style.boxShadow='0 4px 20px rgba(212,168,42,0.35)'"
+      >
+        ✦ Generate Masterpiece
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Transform Tab ────────────────────────────────────────────────── -->
+  <div id="tab-transform" class="tab-panel hidden">
+    <div class="rounded-xl border p-6 sm:p-8" style="background:#1a1510;border-color:#3a2e1a;box-shadow:0 4px 24px rgba(0,0,0,0.4);">
+
+      <!-- Upload area -->
+      <div class="mb-6">
+        <label class="block font-display text-base font-semibold text-cream mb-2">Upload Your Photo</label>
+        <p class="font-body text-cream-dim text-sm mb-3">Upload a photo to transform it into Mughal miniature art. JPEG, PNG or WEBP, max 10MB.</p>
+
+        <div id="drop-zone"
+             class="relative border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-200"
+             style="border-color:#3a2e1a;background:#0d0a07;"
+             ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)"
+             onclick="document.getElementById('file-input').click()">
+          <!-- Default state -->
+          <div id="drop-default">
+            <div class="text-4xl mb-3 opacity-60">📷</div>
+            <p class="font-display text-base text-cream-dim mb-1">Drop your image here</p>
+            <p class="font-body text-sm text-cream-dim opacity-60">or click to browse files</p>
+          </div>
+          <!-- Preview state -->
+          <div id="drop-preview" class="hidden">
+            <img id="preview-img" src="" alt="Preview" class="max-h-48 mx-auto rounded-lg object-contain mb-3" />
+            <p id="preview-name" class="font-body text-sm text-cream-dim truncate"></p>
+            <p class="font-body text-xs text-gold opacity-70 mt-1">Click to change image</p>
+          </div>
+          <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp" class="hidden" onchange="onFileSelect(event)" />
+        </div>
+      </div>
+
+      <!-- Style preset for transform -->
+      <div class="mb-8">
+        <label class="block font-display text-base font-semibold text-cream mb-3">Choose Your Style</label>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="style-card cursor-pointer rounded-xl border p-4 transition-all duration-200 relative overflow-hidden"
+               data-style="akbari" onclick="selectStyle('transform', 'akbari')"
+               style="background:#231e14;border-color:#3a2e1a;">
+            <div class="absolute top-0 left-0 right-0 h-0.5 opacity-0 transition-opacity" id="tr-akbari-bar"
+                 style="background:linear-gradient(90deg,transparent,#d4a82a,transparent);"></div>
+            <div class="text-2xl mb-2">🏛️</div>
+            <div class="font-display text-sm font-semibold text-cream mb-1">Akbari</div>
+            <div class="text-xs font-body text-cream-dim leading-relaxed">Bold outlines · Persian influence · Jewel tones</div>
+          </div>
+          <div class="style-card cursor-pointer rounded-xl border p-4 transition-all duration-200 relative overflow-hidden"
+               data-style="jahangiri" onclick="selectStyle('transform', 'jahangiri')"
+               style="background:#231e14;border-color:#3a2e1a;">
+            <div class="absolute top-0 left-0 right-0 h-0.5 opacity-0 transition-opacity" id="tr-jahangiri-bar"
+                 style="background:linear-gradient(90deg,transparent,#d4a82a,transparent);"></div>
+            <div class="text-2xl mb-2">🌿</div>
+            <div class="font-display text-sm font-semibold text-cream mb-1">Jahangiri</div>
+            <div class="text-xs font-body text-cream-dim leading-relaxed">Naturalistic detail · Botanical motifs · Pastel palette</div>
+          </div>
+          <div class="style-card cursor-pointer rounded-xl border p-4 transition-all duration-200 relative overflow-hidden"
+               data-style="shahjahani" onclick="selectStyle('transform', 'shahjahani')"
+               style="background:#231e14;border-color:#3a2e1a;">
+            <div class="absolute top-0 left-0 right-0 h-0.5 opacity-0 transition-opacity" id="tr-shahjahani-bar"
+                 style="background:linear-gradient(90deg,transparent,#d4a82a,transparent);"></div>
+            <div class="text-2xl mb-2">🕌</div>
+            <div class="font-display text-sm font-semibold text-cream mb-1">Shahjahani</div>
+            <div class="text-xs font-body text-cream-dim leading-relaxed">White marble aesthetic · Refined symmetry · Opulent borders</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transform progress -->
+      <div id="tr-progress" class="hidden mb-6 rounded-xl border p-6 text-center" style="background:#0d0a07;border-color:#5a4a1a;">
+        <div class="text-3xl mb-3">⟳</div>
+        <p id="tr-progress-text" class="font-display text-lg font-semibold text-gold mb-2">Weaving Mughal brushstrokes…</p>
+        <div class="flex justify-center mt-3">
+          <div class="w-48 h-1 rounded-full overflow-hidden" style="background:#3a2e1a;">
+            <div id="tr-progress-bar" class="h-full rounded-full transition-all duration-300" style="background:linear-gradient(90deg,#d4a82a,#f0cc58);width:0%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transform button -->
+      <button id="tr-btn" onclick="transformPhoto()"
+              class="w-full py-3.5 rounded-xl font-display font-semibold text-base tracking-wide transition-all duration-200 active:scale-95"
+              style="background:linear-gradient(135deg,#a07a18,#d4a82a,#f0cc58,#d4a82a);color:#0d0a07;box-shadow:0 4px 20px rgba(212,168,42,0.35);"
+              onmouseover="this.style.boxShadow='0 6px 28px rgba(212,168,42,0.5)'"
+              onmouseout="this.style.boxShadow='0 4px 20px rgba(212,168,42,0.35)'"
+      >
+        ⟳ Transform into Mughal Art
+      </button>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// ── State ────────────────────────────────────────────────────────────────
+let genStyle = 'akbari';
+let trStyle  = 'akbari';
+let selectedFile = null;
+
+// ── On load: select default style cards ─────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  selectStyle('generate', 'akbari');
+  selectStyle('transform', 'akbari');
+
+  // Tab active state
+  switchTab('generate');
+
+  // Character counter
+  const prompt = document.getElementById('gen-prompt');
+  const counter = document.getElementById('gen-char-count');
+  prompt.addEventListener('input', () => {
+    counter.textContent = `${prompt.value.length} / 500`;
+    if (prompt.value.length > 450) counter.style.color = '#d4a82a';
+    else counter.style.color = '';
+  });
+});
+
+// ── Tab switching ────────────────────────────────────────────────────────
+function switchTab(name) {
+  const genBtn = document.getElementById('tab-generate-btn');
+  const trBtn  = document.getElementById('tab-transform-btn');
+  const genTab = document.getElementById('tab-generate');
+  const trTab  = document.getElementById('tab-transform');
+
+  if (name === 'generate') {
+    genBtn.style.cssText = 'background:linear-gradient(135deg,#a07a18,#d4a82a);color:#0d0a07;box-shadow:0 2px 12px rgba(212,168,42,0.3);';
+    trBtn.style.cssText  = 'background:transparent;color:#c8b898;';
+    genTab.classList.remove('hidden');
+    trTab.classList.add('hidden');
+  } else {
+    trBtn.style.cssText  = 'background:linear-gradient(135deg,#a07a18,#d4a82a);color:#0d0a07;box-shadow:0 2px 12px rgba(212,168,42,0.3);';
+    genBtn.style.cssText = 'background:transparent;color:#c8b898;';
+    trTab.classList.remove('hidden');
+    genTab.classList.add('hidden');
+  }
+}
+
+// ── Style card selection ─────────────────────────────────────────────────
+function selectStyle(panel, style) {
+  const prefix = panel === 'generate' ? 'gen' : 'tr';
+  const parentId = panel === 'generate' ? 'gen-style-grid' : 'tr-btn';
+  const cards = document.querySelectorAll(`#tab-${panel} .style-card`);
+
+  cards.forEach(card => {
+    const s = card.dataset.style;
+    const bar = document.getElementById(`${prefix}-${s}-bar`);
+    if (s === style) {
+      card.style.borderColor = '#d4a82a';
+      card.style.background  = '#2a2318';
+      card.style.boxShadow   = '0 0 0 1px rgba(212,168,42,0.3),0 4px 12px rgba(212,168,42,0.15)';
+      if (bar) bar.style.opacity = '1';
+    } else {
+      card.style.borderColor = '#3a2e1a';
+      card.style.background  = '#231e14';
+      card.style.boxShadow   = 'none';
+      if (bar) bar.style.opacity = '0';
+    }
+  });
+
+  if (panel === 'generate') genStyle = style;
+  else trStyle = style;
+}
+
+// ── File upload drag-and-drop ────────────────────────────────────────────
+function onDragOver(e) {
+  e.preventDefault();
+  document.getElementById('drop-zone').style.borderColor = '#d4a82a';
+  document.getElementById('drop-zone').style.background  = '#1a1510';
+}
+function onDragLeave(e) {
+  document.getElementById('drop-zone').style.borderColor = '#3a2e1a';
+  document.getElementById('drop-zone').style.background  = '#0d0a07';
+}
+function onDrop(e) {
+  e.preventDefault();
+  onDragLeave(e);
+  const file = e.dataTransfer.files[0];
+  if (file) setFile(file);
+}
+function onFileSelect(e) {
+  const file = e.target.files[0];
+  if (file) setFile(file);
+}
+function setFile(file) {
+  selectedFile = file;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    document.getElementById('preview-img').src = ev.target.result;
+    document.getElementById('preview-name').textContent = file.name;
+    document.getElementById('drop-default').classList.add('hidden');
+    document.getElementById('drop-preview').classList.remove('hidden');
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── Generate art ─────────────────────────────────────────────────────────
+async function generateArt() {
+  const prompt = document.getElementById('gen-prompt').value.trim();
+  const btn    = document.getElementById('gen-btn');
+  const prog   = document.getElementById('gen-progress');
+
+  if (!prompt || prompt.length < 3) {
+    showModal('warning', 'Please enter a description of at least 3 characters before generating.', { title: 'Prompt Too Short' });
+    return;
+  }
+
+  btn.disabled = true;
+  btn.style.opacity = '0.6';
+  prog.classList.remove('hidden');
+
+  const steps = [
+    { text: '✦ Enhancing your vision…',      icon: '✦',  dot: 1 },
+    { text: '✦ Weaving Mughal brushstrokes…', icon: '🖌️', dot: 2 },
+    { text: '✦ Saving your masterpiece…',     icon: '📜', dot: 3 },
+  ];
+
+  let stepIdx = 0;
+  function advanceStep() {
+    const s = steps[stepIdx];
+    document.getElementById('gen-progress-text').textContent = s.text;
+    document.getElementById('gen-progress-icon').textContent = s.icon;
+    for (let i = 1; i <= 3; i++) {
+      document.getElementById(`step-dot-${i}`).style.background = i <= s.dot ? '#d4a82a' : '#3a2e1a';
+    }
+    stepIdx++;
+  }
+  advanceStep();
+  const stepTimer1 = setTimeout(advanceStep, 4000);
+  const stepTimer2 = setTimeout(advanceStep, 10000);
+
+  try {
+    const resp = await apiFetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt, style_preset: genStyle }),
+    });
+
+    clearTimeout(stepTimer1);
+    clearTimeout(stepTimer2);
+
+    if (!resp) return; // 401 / network handled by apiFetch
+
+    const data = await resp.json();
+    if (!resp.ok) {
+      prog.classList.add('hidden');
+      showModal('error', data.detail || 'Generation failed. Please try again.');
+      return;
+    }
+
+    window.location.href = '/gallery';
+
+  } catch (err) {
+    clearTimeout(stepTimer1);
+    clearTimeout(stepTimer2);
+    prog.classList.add('hidden');
+    showModal('error', 'An unexpected error occurred. Please try again.');
+  } finally {
+    btn.disabled = false;
+    btn.style.opacity = '1';
+  }
+}
+
+// ── Transform photo ──────────────────────────────────────────────────────
+async function transformPhoto() {
+  const btn  = document.getElementById('tr-btn');
+  const prog = document.getElementById('tr-progress');
+
+  if (!selectedFile) {
+    showModal('warning', 'Please upload a photo before applying a style.', { title: 'No Image Selected' });
+    return;
+  }
+
+  btn.disabled = true;
+  btn.style.opacity = '0.6';
+  prog.classList.remove('hidden');
+
+  let pct = 0;
+  const barEl = document.getElementById('tr-progress-bar');
+  const progInterval = setInterval(() => {
+    pct = Math.min(pct + Math.random() * 8, 85);
+    barEl.style.width = pct + '%';
+  }, 600);
+
+  const steps = ['Weaving Mughal brushstrokes…', 'Applying pigments and gold leaf…', 'Saving your masterpiece…'];
+  let si = 0;
+  const stepInterval = setInterval(() => {
+    si = (si + 1) % steps.length;
+    document.getElementById('tr-progress-text').textContent = steps[si];
+  }, 5000);
+
+  try {
+    const fd = new FormData();
+    fd.append('file', selectedFile);
+    fd.append('style_preset', trStyle);
+
+    const resp = await apiFetch('/api/transform', { method: 'POST', body: fd });
+
+    clearInterval(progInterval);
+    clearInterval(stepInterval);
+
+    if (!resp) return;
+
+    const data = await resp.json();
+    if (!resp.ok) {
+      prog.classList.add('hidden');
+      showModal('error', data.detail || 'Transformation failed. Please try again.');
+      return;
+    }
+
+    barEl.style.width = '100%';
+    setTimeout(() => { window.location.href = '/gallery'; }, 300);
+
+  } catch (err) {
+    clearInterval(progInterval);
+    clearInterval(stepInterval);
+    prog.classList.add('hidden');
+    showModal('error', 'An unexpected error occurred. Please try again.');
+  } finally {
+    btn.disabled = false;
+    btn.style.opacity = '1';
+  }
+}
+</script>
+{% endblock %}

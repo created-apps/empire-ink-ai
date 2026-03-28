@@ -1,0 +1,506 @@
+/* ═══════════════════════════════════════════════════════════════════════════════
+   Empire & Ink — Mughal Miniature Art Theme
+   Palette: Deep Crimson · Saffron Gold · Lapis Lazuli · Ivory · Emerald
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Google Fonts ────────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&display=swap');
+
+/* ── CSS Custom Properties ───────────────────────────────────────────────────── */
+:root {
+  --crimson:       #8B1A1A;
+  --crimson-light: #C0392B;
+  --crimson-dark:  #5C0F0F;
+  --gold:          #C9962B;
+  --gold-light:    #E8BC5A;
+  --gold-dark:     #8B6914;
+  --lapis:         #1B3A5C;
+  --lapis-light:   #2E5875;
+  --ivory:         #F5ECD7;
+  --ivory-dark:    #E8D5B0;
+  --emerald:       #1A5C3A;
+  --bg-dark:       #0F0A05;
+  --bg-mid:        #1A1208;
+  --bg-card:       #1E160A;
+  --text-primary:  #F5ECD7;
+  --text-muted:    #B8A882;
+  --border-gold:   rgba(201, 150, 43, 0.35);
+  --shadow-gold:   rgba(201, 150, 43, 0.15);
+}
+
+/* ── Base Reset & Body ───────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  background-color: var(--bg-dark) !important;
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(139, 26, 26, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(27, 58, 92, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 80%, rgba(26, 92, 58, 0.05) 0%, transparent 60%);
+  color: var(--text-primary) !important;
+  font-family: 'Crimson Text', Georgia, serif !important;
+  min-height: 100vh;
+}
+
+/* ── Scrollbar ───────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-dark); }
+::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+/* ── Typography ──────────────────────────────────────────────────────────────── */
+.ei-logo-text {
+  font-family: 'Playfair Display', serif !important;
+  color: var(--gold-light) !important;
+  letter-spacing: 0.05em;
+}
+
+.ei-page-title {
+  font-family: 'Playfair Display', serif !important;
+  font-size: 2rem !important;
+  color: var(--gold-light) !important;
+  letter-spacing: 0.02em;
+}
+
+.ei-page-subtitle {
+  font-family: 'IM Fell English', serif !important;
+  font-style: italic;
+  font-size: 1rem !important;
+  color: var(--text-muted) !important;
+  letter-spacing: 0.05em;
+}
+
+.ei-heading {
+  font-family: 'Playfair Display', serif !important;
+  color: var(--gold-light) !important;
+}
+
+.ei-section-label {
+  font-family: 'Playfair Display', serif !important;
+  font-size: 0.85rem !important;
+  color: var(--gold) !important;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border-gold);
+  padding-bottom: 6px;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.ei-prompt-text {
+  font-family: 'Crimson Text', serif !important;
+  color: var(--text-muted) !important;
+  line-height: 1.5;
+}
+
+/* ── Navigation Bar ──────────────────────────────────────────────────────────── */
+.ei-navbar {
+  background: linear-gradient(135deg, var(--bg-mid) 0%, #120D06 100%) !important;
+  border-bottom: 1px solid var(--border-gold) !important;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.6), 0 1px 0 var(--border-gold) !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+}
+
+.ei-nav-link {
+  color: var(--text-muted) !important;
+  font-family: 'Crimson Text', serif !important;
+  font-size: 1rem !important;
+  letter-spacing: 0.08em;
+  text-decoration: none !important;
+  transition: color 0.2s ease;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.ei-nav-link:hover {
+  color: var(--gold-light) !important;
+  background: rgba(201, 150, 43, 0.1);
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────────────────── */
+.ei-btn-primary {
+  background: linear-gradient(135deg, var(--crimson) 0%, var(--crimson-dark) 100%) !important;
+  border: 1px solid rgba(201, 150, 43, 0.4) !important;
+  color: var(--gold-light) !important;
+  font-family: 'Playfair Display', serif !important;
+  letter-spacing: 0.06em;
+  padding: 10px 24px !important;
+  border-radius: 4px !important;
+  transition: all 0.25s ease !important;
+  box-shadow: 0 2px 12px rgba(139, 26, 26, 0.4) !important;
+}
+
+.ei-btn-primary:hover {
+  background: linear-gradient(135deg, var(--crimson-light) 0%, var(--crimson) 100%) !important;
+  box-shadow: 0 4px 20px rgba(139, 26, 26, 0.6), 0 0 0 1px var(--gold) !important;
+  transform: translateY(-1px);
+}
+
+.ei-btn-outline {
+  background: transparent !important;
+  border: 1px solid var(--border-gold) !important;
+  color: var(--gold) !important;
+  font-family: 'Crimson Text', serif !important;
+  letter-spacing: 0.04em;
+  padding: 8px 20px !important;
+  border-radius: 4px !important;
+  transition: all 0.2s ease !important;
+}
+
+.ei-btn-outline:hover {
+  background: rgba(201, 150, 43, 0.1) !important;
+  border-color: var(--gold) !important;
+  color: var(--gold-light) !important;
+}
+
+.ei-btn-danger {
+  background: linear-gradient(135deg, #8B1A1A 0%, #5C0F0F 100%) !important;
+  border: 1px solid rgba(192, 57, 43, 0.5) !important;
+  color: var(--ivory) !important;
+  font-family: 'Crimson Text', serif !important;
+  border-radius: 4px !important;
+}
+
+.ei-icon-btn {
+  min-width: 32px !important;
+  min-height: 32px !important;
+  border-radius: 50% !important;
+  transition: background 0.2s ease !important;
+}
+
+.ei-icon-btn:hover {
+  background: rgba(201, 150, 43, 0.1) !important;
+}
+
+.ei-filter-btn {
+  background: transparent !important;
+  border: 1px solid var(--border-gold) !important;
+  color: var(--text-muted) !important;
+  font-family: 'Crimson Text', serif !important;
+  font-size: 0.9rem !important;
+  padding: 4px 16px !important;
+  border-radius: 20px !important;
+  transition: all 0.2s ease !important;
+}
+
+.ei-filter-btn:hover {
+  border-color: var(--gold) !important;
+  color: var(--gold-light) !important;
+  background: rgba(201, 150, 43, 0.08) !important;
+}
+
+/* ── Cards ───────────────────────────────────────────────────────────────────── */
+.ei-auth-card,
+.ei-controls-card,
+.ei-result-card,
+.ei-gallery-card {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-gold) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.5), inset 0 1px 0 rgba(201,150,43,0.1) !important;
+}
+
+/* Ornate corner decoration via pseudo-elements */
+.ei-controls-card,
+.ei-result-card {
+  position: relative;
+}
+.ei-controls-card::before,
+.ei-result-card::before {
+  content: '✦';
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  color: var(--gold-dark);
+  font-size: 0.7rem;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.ei-gallery-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  overflow: hidden !important;
+}
+
+.ei-gallery-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.7), 0 0 0 1px var(--border-gold) !important;
+}
+
+/* ── Auth Page Layout ────────────────────────────────────────────────────────── */
+.ei-auth-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  gap: 24px;
+  background-image:
+    radial-gradient(ellipse at center top, rgba(139,26,26,0.15) 0%, transparent 50%);
+}
+
+.ei-auth-header {
+  text-align: center;
+}
+
+.ei-auth-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 32px !important;
+}
+
+/* ── Page Layout ─────────────────────────────────────────────────────────────── */
+.ei-page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  gap: 24px;
+  width: 100%;
+}
+
+.ei-page-header {
+  text-align: center;
+  padding: 16px 0 8px;
+  position: relative;
+}
+
+.ei-page-header::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 12px auto 0;
+}
+
+/* ── Studio Layout (two-column) ──────────────────────────────────────────────── */
+.ei-studio-layout {
+  display: grid !important;
+  grid-template-columns: 380px 1fr;
+  align-items: start;
+}
+
+.ei-controls-card {
+  padding: 24px !important;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: sticky;
+  top: 80px;
+}
+
+.ei-result-card {
+  padding: 24px !important;
+  min-height: 400px;
+}
+
+/* ── Gallery Grid ────────────────────────────────────────────────────────────── */
+.ei-gallery-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)) !important;
+  gap: 20px !important;
+}
+
+/* ── Form Inputs ─────────────────────────────────────────────────────────────── */
+.ei-input .q-field__control,
+.ei-textarea .q-field__control,
+.ei-select .q-field__control {
+  background: rgba(245, 236, 215, 0.04) !important;
+  border: 1px solid var(--border-gold) !important;
+  border-radius: 4px !important;
+  color: var(--text-primary) !important;
+}
+
+.ei-input .q-field__control:hover,
+.ei-textarea .q-field__control:hover {
+  border-color: var(--gold-dark) !important;
+}
+
+.ei-input .q-field__control:focus-within,
+.ei-textarea .q-field__control:focus-within {
+  border-color: var(--gold) !important;
+  box-shadow: 0 0 0 2px rgba(201, 150, 43, 0.15) !important;
+}
+
+.ei-input .q-field__label,
+.ei-textarea .q-field__label,
+.ei-select .q-field__label {
+  color: var(--gold-dark) !important;
+}
+
+.ei-input input,
+.ei-textarea textarea {
+  color: var(--text-primary) !important;
+  font-family: 'Crimson Text', serif !important;
+  font-size: 1rem !important;
+}
+
+/* ── Upload Zone ─────────────────────────────────────────────────────────────── */
+.ei-upload-zone {
+  border: 2px dashed var(--border-gold) !important;
+  border-radius: 8px !important;
+  background: rgba(201, 150, 43, 0.03) !important;
+  transition: all 0.2s ease !important;
+}
+
+.ei-upload-zone:hover {
+  border-color: var(--gold) !important;
+  background: rgba(201, 150, 43, 0.06) !important;
+}
+
+/* ── Tabs ────────────────────────────────────────────────────────────────────── */
+.ei-tabs {
+  border-bottom: 1px solid var(--border-gold) !important;
+  margin-bottom: 8px;
+}
+
+.ei-tabs .q-tab {
+  font-family: 'Playfair Display', serif !important;
+  letter-spacing: 0.05em;
+  color: var(--text-muted) !important;
+  font-size: 1rem !important;
+}
+
+.ei-tabs .q-tab--active {
+  color: var(--gold-light) !important;
+}
+
+.ei-tabs .q-tab__indicator {
+  background: var(--gold) !important;
+  height: 2px;
+}
+
+/* ── Expansion ───────────────────────────────────────────────────────────────── */
+.ei-expansion {
+  background: rgba(201, 150, 43, 0.03) !important;
+  border: 1px solid var(--border-gold) !important;
+  border-radius: 4px !important;
+}
+
+.ei-expansion .q-expansion-item__header {
+  color: var(--gold-dark) !important;
+  font-family: 'Crimson Text', serif !important;
+}
+
+/* ── Links ───────────────────────────────────────────────────────────────────── */
+.ei-link {
+  color: var(--gold) !important;
+  text-decoration: none !important;
+  border-bottom: 1px solid rgba(201, 150, 43, 0.3);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.ei-link:hover {
+  color: var(--gold-light) !important;
+  border-bottom-color: var(--gold-light);
+}
+
+/* ── Ornate Divider ──────────────────────────────────────────────────────────── */
+.ei-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--gold-dark);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  opacity: 0.5;
+}
+.ei-divider::before,
+.ei-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dark), transparent);
+}
+
+/* ── Decorative Mughal Border ────────────────────────────────────────────────── */
+.ei-mughal-border {
+  border: 1px solid var(--border-gold);
+  border-radius: 4px;
+  position: relative;
+  padding: 16px;
+}
+.ei-mughal-border::before,
+.ei-mughal-border::after {
+  content: '✦';
+  position: absolute;
+  color: var(--gold-dark);
+  font-size: 0.6rem;
+  opacity: 0.6;
+}
+.ei-mughal-border::before { top: 6px; left: 8px; }
+.ei-mughal-border::after  { bottom: 6px; right: 8px; }
+
+/* ── Responsive ──────────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .ei-studio-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  .ei-controls-card {
+    position: static !important;
+  }
+
+  .ei-page-title {
+    font-size: 1.5rem !important;
+  }
+
+  .ei-page-container {
+    padding: 16px 12px;
+  }
+
+  .ei-auth-card {
+    padding: 24px 16px !important;
+  }
+}
+
+/* ── Filter Button Active State ─────────────────────────────────────────────── */
+.ei-filter-active {
+  background: rgba(201, 150, 43, 0.18) !important;
+  border-color: var(--gold) !important;
+  color: var(--gold-light) !important;
+}
+
+/* ── Skeleton Loading ────────────────────────────────────────────────────────── */
+@keyframes ei-shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.ei-pulse {
+  background: linear-gradient(
+    90deg,
+    rgba(201, 150, 43, 0.06) 25%,
+    rgba(201, 150, 43, 0.14) 50%,
+    rgba(201, 150, 43, 0.06) 75%
+  ) !important;
+  background-size: 800px 100% !important;
+  animation: ei-shimmer 1.6s infinite linear !important;
+}
+
+.ei-skeleton-img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  border-radius: 0;
+}
+
+.ei-skeleton-line {
+  height: 12px;
+  border-radius: 6px;
+  width: 100%;
+}
+
+.ei-skeleton-line.short {
+  width: 60%;
+}
+
+/* ── Quasar Dark Overrides ───────────────────────────────────────────────────── */
+.q-card { background: var(--bg-card) !important; color: var(--text-primary) !important; }
+.q-separator { background: var(--border-gold) !important; }
+.q-badge { font-family: 'Crimson Text', serif !important; font-size: 0.75rem !important; }
+.q-tooltip { font-family: 'Crimson Text', serif !important; }
+.q-dialog .q-card { border: 1px solid var(--border-gold) !important; }
+.q-spinner-dots { color: var(--gold) !important; }

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Empire & Ink{% endblock %}</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☽</text></svg>" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg:      '#0d0a07',
+            surface: '#1a1510',
+            card:    '#231e14',
+            'card-hover': '#2a2318',
+            gold:    '#d4a82a',
+            'gold-light': '#f0cc58',
+            'gold-dim':   '#a07a18',
+            cream:   '#f0e4c8',
+            'cream-dim':  '#c8b898',
+            'gem-ruby':  '#8b1a2a',
+            'gem-teal':  '#0d6e6e',
+            'gem-indigo':'#2d3a8c',
+            border:  '#3a2e1a',
+            'border-gold': '#5a4a1a',
+          },
+          fontFamily: {
+            display: ['"Playfair Display"', 'Georgia', 'serif'],
+            body:    ['"Crimson Text"', 'Georgia', 'serif'],
+          },
+          boxShadow: {
+            'gold-sm': '0 1px 8px rgba(212,168,42,0.25)',
+            'gold-md': '0 4px 20px rgba(212,168,42,0.3)',
+            'gold-lg': '0 8px 40px rgba(212,168,42,0.35)',
+          },
+          backgroundImage: {
+            'arch-pattern': "url(\"data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0 Q28 8 28 20 Q28 32 20 40 Q12 32 12 20 Q12 8 20 0Z' fill='none' stroke='%23d4a82a' stroke-width='0.4' opacity='0.08'/%3E%3C/svg%3E\")",
+          },
+        },
+      },
+    }
+  </script>
+
+  <style>
+    body { background-color: #0d0a07; color: #f0e4c8; font-family: 'Crimson Text', Georgia, serif; }
+    h1, h2, h3, h4, h5 { font-family: 'Playfair Display', Georgia, serif; }
+
+    /* Gold gradient text utility */
+    .text-gold-gradient {
+      background: linear-gradient(135deg, #d4a82a 0%, #f0cc58 50%, #d4a82a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Shimmer skeleton animation */
+    @keyframes shimmer {
+      0%   { background-position: -800px 0; }
+      100% { background-position: 800px 0; }
+    }
+    .skeleton {
+      background: linear-gradient(90deg, #1a1510 25%, #2a2318 50%, #1a1510 75%);
+      background-size: 800px 100%;
+      animation: shimmer 1.6s infinite linear;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #1a1510; }
+    ::-webkit-scrollbar-thumb { background: #5a4a1a; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #d4a82a; }
+
+    /* Ornamental divider */
+    .ornament::before, .ornament::after {
+      content: '❧';
+      color: #d4a82a;
+      opacity: 0.5;
+      margin: 0 0.75rem;
+      font-size: 0.9em;
+    }
+
+    /* Transition utilities */
+    .transition-card { transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease; }
+    .transition-card:hover { transform: translateY(-3px); }
+
+    /* Input focus gold ring */
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: #d4a82a !important;
+      box-shadow: 0 0 0 2px rgba(212,168,42,0.2);
+    }
+
+    /* Button press effect */
+    .btn-press:active { transform: scale(0.97); }
+  </style>
+
+  {% block extra_head %}{% endblock %}
+</head>
+
+<body class="min-h-full flex flex-col">
+
+  <!-- ── Sticky Navbar ──────────────────────────────────────────────────── -->
+  <nav id="navbar" class="sticky top-0 z-40 border-b border-border" style="background:rgba(13,10,7,0.92);backdrop-filter:blur(12px);">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+
+        <!-- Logo -->
+        <a href="/" class="flex items-center gap-2 group">
+          <span class="text-2xl" style="filter:drop-shadow(0 0 6px rgba(212,168,42,0.6));">☽</span>
+          <span class="font-display font-semibold text-lg text-gold-gradient tracking-wide">Empire &amp; Ink</span>
+        </a>
+
+        <!-- Nav links -->
+        <div class="flex items-center gap-1 sm:gap-2">
+          <a href="/studio" id="nav-studio"
+             class="px-3 py-1.5 rounded-md text-sm font-body text-cream-dim hover:text-cream hover:bg-surface transition-colors duration-200">
+            Studio
+          </a>
+          <a href="/gallery" id="nav-gallery"
+             class="px-3 py-1.5 rounded-md text-sm font-body text-cream-dim hover:text-cream hover:bg-surface transition-colors duration-200">
+            Gallery
+          </a>
+
+          <!-- Divider -->
+          <span class="hidden sm:block text-border-gold mx-1">|</span>
+
+          <!-- User email -->
+          <span id="nav-email" class="hidden sm:block text-xs font-body text-cream-dim max-w-[160px] truncate"></span>
+
+          <!-- Sign Out -->
+          <button onclick="logout()"
+                  class="ml-1 px-3 py-1.5 rounded-md text-sm font-body text-cream-dim hover:text-gold border border-transparent hover:border-border-gold transition-colors duration-200">
+            Sign Out
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gold bottom line accent -->
+    <div class="h-px" style="background:linear-gradient(90deg,transparent,#d4a82a 30%,#f0cc58 50%,#d4a82a 70%,transparent);opacity:0.6;"></div>
+  </nav>
+
+  <!-- ── Main Content ───────────────────────────────────────────────────── -->
+  <main class="flex-1 w-full">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- ── Footer ────────────────────────────────────────────────────────── -->
+  <footer class="border-t border-border py-6 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+      <p class="text-sm font-body text-cream-dim opacity-60">
+        <span class="text-gold opacity-70">☽</span>
+        Empire &amp; Ink — AI Mughal Miniature Studio
+        <span class="text-gold opacity-70">☽</span>
+      </p>
+      <p class="text-xs font-body text-cream-dim opacity-40 mt-1">CreatED Studios × Times of India</p>
+    </div>
+  </footer>
+
+  <!-- ── Global Error / Info Modal ─────────────────────────────────────── -->
+  <div id="g-modal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4"
+       style="background:rgba(5,3,1,0.88);" onclick="if(event.target===this)closeModal()">
+    <div id="g-modal-box" class="modal-enter rounded-2xl border w-full max-w-md p-6 relative"
+         style="background:#1a1510;border-color:#3a2e1a;box-shadow:0 20px 60px rgba(0,0,0,0.85);">
+      <!-- Icon + title row -->
+      <div class="flex items-start gap-4 mb-4">
+        <div id="g-modal-icon" class="text-3xl flex-shrink-0 mt-0.5">⚠</div>
+        <div class="flex-1 min-w-0">
+          <h3 id="g-modal-title" class="font-display text-lg font-bold text-cream mb-1">Something went wrong</h3>
+          <p  id="g-modal-msg"   class="font-body text-sm text-cream-dim leading-relaxed"></p>
+        </div>
+        <button onclick="closeModal()" class="flex-shrink-0 text-cream-dim hover:text-cream text-xl leading-none mt-0.5 ml-1">✕</button>
+      </div>
+      <!-- Actions -->
+      <div id="g-modal-actions" class="flex justify-end gap-2 mt-5"></div>
+    </div>
+  </div>
+
+  <!-- ── Session-expired Modal ───────────────────────────────────────────── -->
+  <div id="session-modal" class="hidden fixed inset-0 z-[210] flex items-center justify-center p-4"
+       style="background:rgba(5,3,1,0.92);">
+    <div class="modal-enter rounded-2xl border w-full max-w-sm p-6 text-center"
+         style="background:#1a1510;border-color:rgba(139,26,42,0.5);box-shadow:0 20px 60px rgba(0,0,0,0.85);">
+      <div class="text-4xl mb-3" style="filter:drop-shadow(0 0 10px rgba(212,168,42,0.4));">☽</div>
+      <h3 class="font-display text-lg font-bold text-cream mb-2">Session Expired</h3>
+      <p class="font-body text-sm text-cream-dim mb-5 leading-relaxed">Your session has ended. Please sign in again to continue.</p>
+      <a href="/login" class="inline-block w-full py-2.5 rounded-xl font-display font-semibold text-sm text-center transition-all duration-200"
+         style="background:linear-gradient(135deg,#a07a18,#d4a82a);color:#0d0a07;">
+        Sign In Again
+      </a>
+    </div>
+  </div>
+
+  <style>
+    @keyframes modalIn { from { opacity:0; transform:scale(0.94) translateY(8px); } to { opacity:1; transform:scale(1) translateY(0); } }
+    .modal-enter { animation: modalIn 0.22s ease forwards; }
+  </style>
+
+  <!-- ── Shared JS ──────────────────────────────────────────────────────── -->
+  <script src="/static/app.js"></script>
+  <script>
+    // Highlight active nav link
+    (function() {
+      const path = window.location.pathname;
+      if (path === '/studio') document.getElementById('nav-studio').classList.add('text-gold');
+      if (path.startsWith('/gallery')) document.getElementById('nav-gallery').classList.add('text-gold');
+    })();
+
+    // Show user email in navbar + auth guard
+    document.addEventListener('DOMContentLoaded', function() {
+      Auth.initNavbar();
+      if (!Auth.requireAuth()) return;
+    });
+  </script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>
