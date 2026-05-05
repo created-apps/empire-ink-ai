@@ -1,347 +1,361 @@
 {% extends "base.html" %}
 
-{% block title %}Your Artworks — Empire & Ink{% endblock %}
+{% block title %}Your Nigārkhanā — Empire &amp; Ink{% endblock %}
 
 {% block extra_head %}
 <style>
-  /* Shimmer skeleton animation */
-  @keyframes shimmer {
-    0%   { background-position: -800px 0; }
-    100% { background-position:  800px 0; }
+  /* ─── Gallery hero band (lapis blue) ─── */
+  .gallery-hero{
+    background:linear-gradient(135deg,var(--rasa-blue-dk),var(--rasa-blue) 60%,#1a3560);
+    padding:56px 24px;
+    position:relative; overflow:hidden;
   }
-  .skeleton-pulse {
-    background: linear-gradient(90deg, #1a1510 25%, #2a2318 50%, #1a1510 75%);
-    background-size: 800px 100%;
-    animation: shimmer 1.6s infinite linear;
-    border-radius: 0.5rem;
+  .gallery-hero::before{
+    content:'';position:absolute;inset:0;
+    background-image:url("data:image/svg+xml,%3Csvg width='60' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 4 Q50 22 50 50 Q50 78 30 96 Q10 78 10 50 Q10 22 30 4Z' fill='none' stroke='%23E8B942' stroke-width='.5' opacity='.08'/%3E%3C/svg%3E");
+    pointer-events:none;
+  }
+  .gallery-hero-inner{
+    max-width:1400px;margin:0 auto;position:relative;z-index:1;
+    display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;
+  }
+  .gallery-hero h1{
+    font-family:'Fraunces',serif;font-size:clamp(36px,5vw,54px);
+    font-style:italic;font-weight:400;color:var(--ivory);line-height:1;margin:10px 0 6px;
+  }
+  .gallery-hero p{color:rgba(244,233,208,.62);font-family:'Spectral',serif;font-size:14.5px;}
+
+  /* ─── Filter chips row ─── */
+  .filter-row{
+    display:flex;gap:10px;flex-wrap:wrap;
+    margin:28px auto 32px;max-width:1400px;padding:0 24px;align-items:center;
   }
 
-  /* Card hover overlay */
-  .gallery-card .card-overlay {
-    opacity: 0;
-    transition: opacity 0.25s ease;
+  /* ─── Gallery grid ─── */
+  .gallery-grid{
+    max-width:1400px; margin:0 auto; padding:0 24px 80px;
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:20px;
   }
-  .gallery-card:hover .card-overlay {
-    opacity: 1;
+  .art-plate{
+    position:relative; background:#120c06;
+    border:1px solid rgba(201,150,43,.2);
+    border-radius:6px; overflow:hidden;
+    padding:12px 12px 14px;
+    cursor:pointer;
+    transition:transform .28s cubic-bezier(.22,1,.36,1), border-color .22s ease, box-shadow .22s ease;
   }
-
-  /* Lightbox fade */
-  @keyframes lbFadeIn { from { opacity: 0; } to { opacity: 1; } }
-  .lb-enter { animation: lbFadeIn 0.2s ease forwards; }
-
-  /* Modal scale in */
-  @keyframes modalIn { from { opacity: 0; transform: scale(0.94) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-  .modal-enter { animation: modalIn 0.25s ease forwards; }
-
-  /* Filter chip */
-  .filter-chip {
-    cursor: pointer;
-    padding: 0.375rem 1rem;
-    border-radius: 9999px;
-    font-family: 'Playfair Display', serif;
-    font-size: 0.8rem;
-    font-weight: 600;
-    border: 1px solid #3a2e1a;
-    color: #c8b898;
-    background: transparent;
-    transition: all 0.2s ease;
-  }
-  .filter-chip:hover { border-color: #5a4a1a; color: #f0e4c8; }
-  .filter-chip.active {
-    background: linear-gradient(135deg,#a07a18,#d4a82a);
-    color: #0d0a07;
-    border-color: transparent;
-    box-shadow: 0 2px 10px rgba(212,168,42,0.3);
+  .art-plate:hover{
+    transform:translateY(-4px);
+    border-color:rgba(232,185,66,.45);
+    box-shadow:0 14px 40px rgba(0,0,0,.6);
   }
 
-  /* Action icon buttons */
-  .icon-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.25rem;
-    height: 2.25rem;
-    border-radius: 0.5rem;
-    border: 1px solid rgba(90,74,26,0.6);
-    background: rgba(13,10,7,0.8);
-    color: #c8b898;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-size: 1rem;
-    backdrop-filter: blur(4px);
+  /* Arch-shaped image clip */
+  .art-arch{
+    aspect-ratio:3/4; background:#0a0604;
+    position:relative; overflow:hidden; margin-bottom:10px;
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 133'><path d='M0 133 L0 40 Q0 0 50 0 Q100 0 100 40 L100 133 Z' fill='black'/></svg>");
+            mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 133'><path d='M0 133 L0 40 Q0 0 50 0 Q100 0 100 40 L100 133 Z' fill='black'/></svg>");
+    -webkit-mask-size:100% 100%; mask-size:100% 100%;
+    -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
   }
-  .icon-btn:hover { border-color: #d4a82a; color: #f0cc58; background: rgba(26,21,16,0.9); }
-  .icon-btn.danger:hover { border-color: #ef4444; color: #fca5a5; }
+  .art-arch img{
+    width:100%; height:100%; object-fit:cover; display:block;
+    transition:transform .5s cubic-bezier(.22,1,.36,1);
+  }
+  .art-plate:hover .art-arch img{ transform:scale(1.06); }
+
+  .plate-caption{
+    font-family:'Fraunces',serif;font-style:italic;font-size:14px;color:var(--ivory);
+    line-height:1.35; margin-bottom:4px;
+    display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;
+  }
+  .plate-meta{
+    font-family:'Spectral',serif;font-size:11px;color:var(--gold);opacity:.7;letter-spacing:.14em;text-transform:uppercase;
+    display:flex;align-items:center;gap:6px;
+  }
+  .plate-source{
+    font-family:'Spectral',serif;font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--ivory-dim); opacity:.55;
+  }
+
+  /* ─── Empty state ─── */
+  .empty-state{
+    max-width:600px; margin:60px auto;
+    text-align:center; padding:48px 24px;
+  }
+
+  /* ─── Lightbox ─── */
+  .lb-overlay{
+    position:fixed;inset:0;z-index:500;background:rgba(4,2,1,.93);
+    display:none;align-items:center;justify-content:center;padding:40px;
+    backdrop-filter:blur(6px);
+  }
+  .lb-overlay.open{display:flex;animation:lbFadeIn .25s ease;}
+  @keyframes lbFadeIn{from{opacity:0;}to{opacity:1;}}
+  .lb-card{
+    background:#120c06;border:1px solid rgba(201,150,43,.3);border-radius:8px;
+    max-width:920px;width:100%;max-height:90vh;overflow:auto;padding:24px;
+    display:grid;grid-template-columns:1.1fr 1fr;gap:22px;position:relative;
+  }
+  @media (max-width:720px){ .lb-card{grid-template-columns:1fr;} }
+  .lb-img{
+    aspect-ratio:3/4;background:#0a0604;border-radius:4px;overflow:hidden;
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 133'><path d='M0 133 L0 30 Q0 0 50 0 Q100 0 100 30 L100 133 Z' fill='black'/></svg>");
+            mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 133'><path d='M0 133 L0 30 Q0 0 50 0 Q100 0 100 30 L100 133 Z' fill='black'/></svg>");
+    -webkit-mask-size:100% 100%; mask-size:100% 100%;
+    -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
+  }
+  .lb-img img{ width:100%;height:100%;object-fit:cover; }
+  .lb-close-btn{
+    position:absolute;top:12px;right:14px;
+    background:rgba(20,14,8,.7);border:1px solid rgba(201,150,43,.3);color:var(--ivory);
+    width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:14px;
+    display:flex;align-items:center;justify-content:center;
+    transition:all .2s ease;z-index:5;
+  }
+  .lb-close-btn:hover{border-color:var(--gold-bright);color:var(--gold-pale);}
+
+  .lb-badge{
+    display:inline-block;padding:4px 12px;border-radius:999px;
+    font-family:'Fraunces',serif;font-style:italic;font-size:12px;letter-spacing:.02em;
+  }
+  .lb-badge.gen{background:rgba(201,150,43,.18);color:var(--gold-pale);border:1px solid rgba(201,150,43,.35);}
+  .lb-badge.tr{background:rgba(45,120,90,.22);color:#9be0bd;border:1px solid rgba(75,165,125,.35);}
+  .lb-badge.style{background:transparent;color:var(--ivory);border:1px solid rgba(201,150,43,.3);}
+
+  /* ─── Re-transform modal ─── */
+  .rt-overlay{
+    position:fixed;inset:0;z-index:520;background:rgba(4,2,1,.92);
+    display:none;align-items:center;justify-content:center;padding:24px;
+    backdrop-filter:blur(6px);
+  }
+  .rt-overlay.open{display:flex;}
+  .rt-card{
+    background:#120c06;border:1px solid rgba(201,150,43,.3);border-radius:8px;
+    max-width:520px;width:100%;padding:28px;
+  }
+  .rt-era-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;
+  }
+  .style-card-rt{
+    cursor:pointer; padding:14px 12px; border-radius:6px;
+    border:1.5px solid transparent;
+    transition:all .22s ease; position:relative; overflow:hidden;
+  }
+  .style-card-rt[data-style="akbari"]    { background:linear-gradient(135deg,#560808,#8a1818);}
+  .style-card-rt[data-style="jahangiri"] { background:linear-gradient(135deg,#0E2410,#2b4a2d);}
+  .style-card-rt[data-style="shahjahani"]{ background:linear-gradient(135deg,#071528,#1a3560);}
+  .style-card-rt:hover{ filter:brightness(1.12); }
+  .style-card-rt.selected{ border-color:var(--gold-bright); box-shadow:0 0 0 1px rgba(232,185,66,.4); }
+
+  /* ─── Skeleton ─── */
+  .skeleton-card{
+    background:#120c06; border:1px solid rgba(201,150,43,.12); border-radius:6px;
+    padding:12px 12px 14px;
+  }
+  .skeleton-img{
+    aspect-ratio:3/4; background:#1a1208; border-radius:4px;
+  }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
-  <!-- Page header -->
-  <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
+<!-- ═════════════════════ GALLERY HERO BAND ═════════════════════ -->
+<section class="gallery-hero">
+  <div class="gallery-hero-inner">
     <div>
-      <h1 class="font-display text-4xl font-bold mb-2" style="background:linear-gradient(135deg,#d4a82a,#f0cc58,#d4a82a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
-        Your Artworks
-      </h1>
-      <p class="font-body text-cream-dim text-base">
-        <span id="gallery-count">…</span> artworks in your royal collection
-      </p>
+      <div class="rasa-eyebrow">śāntam — nigārkhanā</div>
+      <h1>Your Royal Collection</h1>
+      <p><span id="gallery-count">…</span> artworks preserved in your studio</p>
     </div>
-    <a href="/" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border font-display text-sm font-semibold text-gold hover:text-gold-light border-border-gold hover:border-gold transition-colors duration-200">
-      ✦ Create New
-    </a>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+      <a class="btn-gold" href="/studio">✦ &nbsp;Create New</a>
+    </div>
   </div>
+</section>
 
-  <!-- Filter chips -->
-  <div class="flex gap-2 flex-wrap mb-8">
-    <button class="filter-chip active" data-filter="all"      onclick="setFilter('all')">All</button>
-    <button class="filter-chip"        data-filter="generate" onclick="setFilter('generate')">Generated</button>
-    <button class="filter-chip"        data-filter="transform" onclick="setFilter('transform')">Transformed</button>
-  </div>
-
-  <!-- Gallery grid -->
-  <div id="gallery-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-    <!-- Skeleton loading cards (shown while loading) -->
-    {% for i in range(8) %}
-    <div class="skeleton-card aspect-square skeleton-pulse rounded-xl"></div>
-    {% endfor %}
-  </div>
-
-  <!-- Empty state (hidden until needed) -->
-  <div id="empty-state" class="hidden flex-col items-center justify-center py-24 text-center">
-    <div class="text-6xl mb-5 opacity-40" style="filter:drop-shadow(0 0 12px rgba(212,168,42,0.3));">☽</div>
-    <h2 class="font-display text-2xl font-semibold text-cream mb-3">Your canvas awaits</h2>
-    <p class="font-body text-cream-dim text-lg mb-6">No artworks yet. Begin your royal journey.</p>
-    <a href="/" class="px-6 py-3 rounded-xl font-display font-semibold text-base tracking-wide"
-       style="background:linear-gradient(135deg,#a07a18,#d4a82a,#f0cc58,#d4a82a);color:#0d0a07;box-shadow:0 4px 20px rgba(212,168,42,0.35);">
-      ✦ Create Your First Artwork
-    </a>
-  </div>
-
+<!-- ═════════════════════ FILTER ROW ═════════════════════ -->
+<div class="filter-row">
+  <button class="chip active filter-chip" data-filter="all"       onclick="setFilter('all')">All folios</button>
+  <button class="chip filter-chip"        data-filter="generate"  onclick="setFilter('generate')">Generated</button>
+  <button class="chip filter-chip"        data-filter="transform" onclick="setFilter('transform')">Transformed</button>
+  <div style="flex:1;"></div>
 </div>
 
-<!-- ── Lightbox ────────────────────────────────────────────────────────── -->
-<div id="lightbox" class="hidden fixed inset-0 z-50 lb-enter" style="background:rgba(5,3,1,0.95);">
-  <div class="flex flex-col h-full">
-    <!-- Close button -->
-    <div class="flex justify-end p-4">
-      <button onclick="closeLightbox()" class="icon-btn text-xl" title="Close (Esc)">✕</button>
-    </div>
+<!-- ═════════════════════ GRID ═════════════════════ -->
+<div id="gallery-grid" class="gallery-grid">
+  {% for i in range(8) %}
+  <div class="skeleton-card">
+    <div class="skeleton-img skeleton"></div>
+    <div class="skeleton" style="height:14px;width:75%;margin:10px 0 6px;border-radius:3px;"></div>
+    <div class="skeleton" style="height:10px;width:50%;border-radius:3px;"></div>
+  </div>
+  {% endfor %}
+</div>
 
-    <!-- Image -->
-    <div class="flex-1 flex items-center justify-center px-4 py-2 min-h-0">
-      <img id="lb-image" src="" alt="Artwork" class="max-w-full max-h-full object-contain rounded-xl"
-           style="box-shadow:0 0 60px rgba(212,168,42,0.15);" />
-    </div>
+<!-- Empty state -->
+<div id="empty-state" class="empty-state hidden">
+  <div style="font-size:64px;margin-bottom:16px;color:var(--gold-pale);opacity:.5;filter:drop-shadow(0 0 18px rgba(232,185,66,.35));">☽</div>
+  <h2 style="font-family:'Fraunces',serif;font-style:italic;font-weight:400;color:var(--ivory);font-size:28px;margin-bottom:10px;">Your canvas awaits</h2>
+  <p style="font-family:'Spectral',serif;color:var(--ivory-dim);opacity:.7;font-size:15px;margin-bottom:24px;line-height:1.65;">No artworks yet. Begin your royal journey in the atelier.</p>
+  <a href="/studio" class="btn-gold">✦ &nbsp;Create Your First Artwork</a>
+</div>
 
-    <!-- Bottom bar -->
-    <div class="border-t p-5" style="background:#1a1510;border-color:#3a2e1a;">
-      <div class="max-w-4xl mx-auto flex flex-col sm:flex-row sm:items-start justify-between gap-4">
-        <!-- Info -->
-        <div class="flex-1 min-w-0">
-          <div class="flex flex-wrap gap-2 mb-2">
-            <span id="lb-source-badge" class="px-2 py-0.5 rounded-full text-xs font-display font-semibold"></span>
-            <span id="lb-style-badge" class="px-2 py-0.5 rounded-full text-xs font-body border" style="border-color:#3a2e1a;color:#c8b898;"></span>
-          </div>
-          <p id="lb-prompt" class="font-body text-sm text-cream-dim line-clamp-2 leading-relaxed"></p>
-        </div>
+<!-- ═════════════════════ LIGHTBOX ═════════════════════ -->
+<div id="lightbox" class="lb-overlay">
+  <div class="lb-card" onclick="event.stopPropagation()">
+    <button class="lb-close-btn" onclick="closeLightbox()" title="Close (Esc)">✕</button>
 
-        <!-- Actions -->
-        <div class="flex items-center gap-2 flex-shrink-0">
-          <button id="lb-download-btn" onclick="lbDownload()" class="icon-btn" title="Download">⬇</button>
-          <button id="lb-retransform-btn" onclick="openRetransform()" class="icon-btn" title="Re-transform">⟳</button>
-          <div id="lb-delete-area" class="flex items-center gap-1">
-            <button id="lb-delete-btn" onclick="lbDeleteConfirm()" class="icon-btn danger" title="Delete">🗑</button>
-          </div>
-          <button onclick="closeLightbox()"
-                  class="px-4 py-1.5 rounded-lg font-display text-sm font-semibold border border-border-gold text-gold hover:border-gold transition-colors duration-200 ml-1">
-            Close
-          </button>
+    <div class="lb-img"><img id="lb-image" src="" alt="Artwork"/></div>
+
+    <div style="display:flex;flex-direction:column;">
+      <div style="margin-bottom:14px;display:flex;flex-wrap:wrap;gap:8px;">
+        <span id="lb-source-badge" class="lb-badge gen">Generated</span>
+        <span id="lb-style-badge"  class="lb-badge style">Akbarī</span>
+      </div>
+
+      <h3 class="rasa-title" id="lb-prompt-title" style="font-size:22px;margin-bottom:8px;">Folio</h3>
+      <p class="rasa-body" id="lb-prompt" style="margin-bottom:20px;"></p>
+
+      <div style="display:flex;gap:10px;margin-top:auto;flex-wrap:wrap;align-items:center;">
+        <button class="btn-gold" style="padding:9px 18px;font-size:13px;" onclick="lbDownload()">⤓ &nbsp;Download</button>
+        <button class="btn-ghost" style="padding:9px 18px;font-size:13px;" onclick="openRetransform()">⟳ &nbsp;Re-transform</button>
+        <div id="lb-delete-area" style="display:flex;align-items:center;gap:6px;margin-left:auto;">
+          <button id="lb-delete-btn" onclick="lbDeleteConfirm()" class="icon-btn danger" title="Delete">🗑</button>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ── Re-transform Modal ──────────────────────────────────────────────── -->
-<div id="retransform-modal" class="hidden fixed inset-0 flex items-center justify-center p-4" style="background:rgba(5,3,1,0.85);z-index:60;" onclick="closeRetransformIfBg(event)">
-  <div class="modal-enter rounded-2xl border w-full max-w-lg p-6" style="background:#1a1510;border-color:#3a2e1a;box-shadow:0 20px 60px rgba(0,0,0,0.8);">
-    <div class="flex items-start justify-between mb-5">
+<!-- ═════════════════════ RE-TRANSFORM MODAL ═════════════════════ -->
+<div id="retransform-modal" class="rt-overlay" onclick="closeRetransformIfBg(event)">
+  <div class="rt-card modal-enter">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px;">
       <div>
-        <h3 class="font-display text-xl font-bold text-cream">Re-transform Artwork</h3>
-        <p class="font-body text-cream-dim text-sm mt-0.5">Apply a new Mughal style to this image</p>
+        <div class="rasa-eyebrow">tabdīl</div>
+        <h3 class="rasa-title" style="font-size:24px;margin-bottom:4px;">Re-Transform</h3>
+        <p style="font-family:'Spectral',serif;font-size:13.5px;color:var(--ivory-dim);opacity:.65;">Apply a new Mughal era to this image.</p>
       </div>
-      <button onclick="closeRetransform()" class="icon-btn text-lg ml-4">✕</button>
+      <button onclick="closeRetransform()" class="icon-btn" style="width:32px;height:32px;font-size:14px;">✕</button>
     </div>
 
     <!-- Thumbnail -->
-    <div class="mb-5 rounded-xl overflow-hidden" style="height:160px;background:#0d0a07;">
-      <img id="rt-thumb" src="" alt="Original" class="w-full h-full object-cover" />
+    <div style="margin-bottom:18px;border-radius:6px;overflow:hidden;height:150px;background:#0a0604;">
+      <img id="rt-thumb" src="" alt="Original" style="width:100%;height:100%;object-fit:cover;display:block;"/>
     </div>
 
-    <!-- Style cards -->
-    <div class="grid grid-cols-3 gap-2 mb-5">
-      <div class="style-card cursor-pointer rounded-xl border p-3 transition-all duration-200 relative overflow-hidden"
-           data-style="akbari" onclick="selectRtStyle('akbari')"
-           style="background:#231e14;border-color:#3a2e1a;">
-        <div class="absolute top-0 left-0 right-0 h-0.5 opacity-0 transition-opacity" id="rt-akbari-bar"
-             style="background:linear-gradient(90deg,transparent,#d4a82a,transparent);"></div>
-        <div class="text-xl mb-1">🏛️</div>
-        <div class="font-display text-xs font-semibold text-cream">Akbari</div>
-        <div class="text-xs font-body text-cream-dim opacity-70 mt-0.5">Bold · Jewel tones</div>
+    <!-- Era cards -->
+    <div class="rt-era-grid">
+      <div class="style-card-rt selected" data-style="akbari" onclick="selectRtStyle('akbari')">
+        <div class="rasa-eyebrow" style="font-size:12px;margin-bottom:0;">śṛṅgāram</div>
+        <div style="font-family:'Fraunces',serif;font-weight:600;color:var(--ivory);font-size:15px;">Akbarī</div>
+        <div style="font-family:'Spectral',serif;font-size:11px;color:rgba(244,233,208,.55);margin-top:2px;">Bold · Jewel</div>
       </div>
-      <div class="style-card cursor-pointer rounded-xl border p-3 transition-all duration-200 relative overflow-hidden"
-           data-style="jahangiri" onclick="selectRtStyle('jahangiri')"
-           style="background:#231e14;border-color:#3a2e1a;">
-        <div class="absolute top-0 left-0 right-0 h-0.5 opacity-0 transition-opacity" id="rt-jahangiri-bar"
-             style="background:linear-gradient(90deg,transparent,#d4a82a,transparent);"></div>
-        <div class="text-xl mb-1">🌿</div>
-        <div class="font-display text-xs font-semibold text-cream">Jahangiri</div>
-        <div class="text-xs font-body text-cream-dim opacity-70 mt-0.5">Botanical · Pastel</div>
+      <div class="style-card-rt" data-style="jahangiri" onclick="selectRtStyle('jahangiri')">
+        <div class="rasa-eyebrow" style="font-size:12px;margin-bottom:0;">kārunyam</div>
+        <div style="font-family:'Fraunces',serif;font-weight:600;color:var(--ivory);font-size:15px;">Jahāngīrī</div>
+        <div style="font-family:'Spectral',serif;font-size:11px;color:rgba(244,233,208,.55);margin-top:2px;">Botanical</div>
       </div>
-      <div class="style-card cursor-pointer rounded-xl border p-3 transition-all duration-200 relative overflow-hidden"
-           data-style="shahjahani" onclick="selectRtStyle('shahjahani')"
-           style="background:#231e14;border-color:#3a2e1a;">
-        <div class="absolute top-0 left-0 right-0 h-0.5 opacity-0 transition-opacity" id="rt-shahjahani-bar"
-             style="background:linear-gradient(90deg,transparent,#d4a82a,transparent);"></div>
-        <div class="text-xl mb-1">🕌</div>
-        <div class="font-display text-xs font-semibold text-cream">Shahjahani</div>
-        <div class="text-xs font-body text-cream-dim opacity-70 mt-0.5">Marble · Opulent</div>
+      <div class="style-card-rt" data-style="shahjahani" onclick="selectRtStyle('shahjahani')">
+        <div class="rasa-eyebrow" style="font-size:12px;margin-bottom:0;">śāntam</div>
+        <div style="font-family:'Fraunces',serif;font-weight:600;color:var(--ivory);font-size:15px;">Shāhjahānī</div>
+        <div style="font-family:'Spectral',serif;font-size:11px;color:rgba(244,233,208,.55);margin-top:2px;">Marble</div>
       </div>
     </div>
 
     <!-- Progress -->
-    <div id="rt-progress" class="hidden mb-4 text-center">
-      <p class="font-display text-sm text-gold mb-2">⟳ Applying Mughal style…</p>
-      <div class="h-1 rounded-full overflow-hidden" style="background:#3a2e1a;">
-        <div id="rt-progress-bar" class="h-full rounded-full" style="background:linear-gradient(90deg,#d4a82a,#f0cc58);width:30%;transition:width 0.5s ease;"></div>
+    <div id="rt-progress" class="hidden" style="margin-bottom:16px;">
+      <p style="font-family:'Fraunces',serif;font-style:italic;font-size:14px;color:var(--gold-pale);margin-bottom:8px;text-align:center;">⟳ Applying Mughal style…</p>
+      <div style="height:4px;border-radius:999px;overflow:hidden;background:#2A2010;">
+        <div id="rt-progress-bar" style="height:100%;width:20%;background:linear-gradient(90deg,var(--gold),var(--gold-bright));transition:width .5s ease;"></div>
       </div>
     </div>
 
-    <!-- Apply button -->
-    <button id="rt-apply-btn" onclick="applyRetransform()"
-            class="w-full py-2.5 rounded-xl font-display font-semibold text-sm tracking-wide transition-all duration-200 active:scale-95"
-            style="background:linear-gradient(135deg,#a07a18,#d4a82a);color:#0d0a07;box-shadow:0 3px 14px rgba(212,168,42,0.3);">
-      Apply Style
+    <button id="rt-apply-btn" class="btn-gold" style="width:100%;justify-content:center;" onclick="applyRetransform()">
+      ⟳ &nbsp;Apply New Era
     </button>
   </div>
 </div>
+
 {% endblock %}
 
 {% block scripts %}
 <script>
-// ── State ────────────────────────────────────────────────────────────────
-let allItems    = [];
-let filterMode  = 'all';
-let activeLbId  = null;
-let activeLbUrl = null;
+// ── State ─────────────────────────────────────────────────────────────────
+let allItems     = [];
+let filterMode   = 'all';
+let activeLbId   = null;
+let activeLbUrl  = null;
 let activeLbItem = null;
-let rtStyle     = 'akbari';
+let rtStyle      = 'akbari';
 
-// ── Load gallery on page ready ───────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', async function() {
-  await loadGallery();
-});
+const STYLE_LABELS = { akbari: 'Akbarī', jahangiri: 'Jahāngīrī', shahjahani: 'Shāhjahānī' };
+const ERA_SANSKRIT = { akbari: 'śṛṅgāram', jahangiri: 'kārunyam', shahjahani: 'śāntam' };
+
+// ── Init ──────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', loadGallery);
 
 async function loadGallery() {
-  const grid = document.getElementById('gallery-grid');
-
-  // Show skeleton
-  grid.innerHTML = Array(8).fill(0).map(() =>
-    `<div class="aspect-square skeleton-pulse rounded-xl"></div>`
-  ).join('');
-
   const resp = await apiFetch('/api/gallery');
-  if (!resp) return; // 401 handled
-
-  const data = await resp.json();
+  if (!resp) return;
   if (!resp.ok) {
-    grid.innerHTML = '';
-    showModal('error', 'Your gallery could not be loaded. Please refresh the page.', { title: 'Gallery Load Failed' });
+    showModal('error', 'Failed to load your gallery. Please refresh.');
     return;
   }
-
-  allItems = data.items || [];
-  updateCount();
+  const data = await resp.json();
+  allItems = Array.isArray(data) ? data : (data.items || []);
   renderCards();
 }
 
-function updateCount() {
-  const visible = filterMode === 'all' ? allItems
-    : allItems.filter(i => i.source_type === filterMode);
-  document.getElementById('gallery-count').textContent = visible.length;
-}
-
-// ── Render cards ─────────────────────────────────────────────────────────
 function renderCards() {
-  const grid = document.getElementById('gallery-grid');
+  const grid       = document.getElementById('gallery-grid');
   const emptyState = document.getElementById('empty-state');
+  const counter    = document.getElementById('gallery-count');
 
-  const items = filterMode === 'all' ? allItems
-    : allItems.filter(i => i.source_type === filterMode);
+  let items = allItems;
+  if (filterMode === 'generate')  items = allItems.filter(i => i.source_type === 'generate');
+  if (filterMode === 'transform') items = allItems.filter(i => i.source_type === 'transform');
 
-  updateCount();
+  counter.textContent = allItems.length;
 
   if (items.length === 0) {
     grid.innerHTML = '';
-    emptyState.classList.remove('hidden');
-    emptyState.classList.add('flex');
+    if (allItems.length === 0) {
+      emptyState.classList.remove('hidden');
+    } else {
+      grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px 20px;font-family:'Spectral',serif;color:var(--ivory-dim);opacity:.55;">No ${filterMode} folios yet.</div>`;
+    }
     return;
   }
-
   emptyState.classList.add('hidden');
-  emptyState.classList.remove('flex');
 
-  grid.innerHTML = items.map(item => {
-    const isGen   = item.source_type === 'generate';
-    const srcBadge = isGen
-      ? `<span class="px-1.5 py-0.5 rounded text-xs font-display font-semibold" style="background:rgba(161,103,6,0.35);color:#f0cc58;border:1px solid rgba(212,168,42,0.3);">Generated</span>`
-      : `<span class="px-1.5 py-0.5 rounded text-xs font-display font-semibold" style="background:rgba(13,110,110,0.3);color:#6ee7b7;border:1px solid rgba(13,110,110,0.4);">Transformed</span>`;
-    const styleLabel = item.style_preset
-      ? item.style_preset.charAt(0).toUpperCase() + item.style_preset.slice(1)
-      : '';
-    const prompt = item.prompt || '';
-    const promptSnip = prompt.length > 80 ? prompt.slice(0, 77) + '…' : prompt;
+  grid.innerHTML = items.map((item, idx) => {
+    const isGen      = item.source_type === 'generate';
+    const style      = item.style_preset || 'akbari';
+    const styleLabel = STYLE_LABELS[style] || style;
+    const prompt     = item.prompt || '';
+    const snippet    = prompt.length > 72 ? prompt.slice(0, 69) + '…' : prompt;
+    const idxNum     = String(allItems.indexOf(item) + 1).padStart(2, '0');
 
     return `
-    <div class="gallery-card cursor-pointer rounded-xl overflow-hidden border transition-card relative"
-         style="background:#231e14;border-color:#2a2318;"
-         onclick="openLightbox('${escHtml(item.id)}')">
-
-      <!-- Image -->
-      <div class="aspect-square overflow-hidden" style="background:#0d0a07;">
-        <img
-          src="${escHtml(item.image_url)}"
-          alt="${escHtml(promptSnip)}"
-          loading="lazy"
-          class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-          onerror="this.style.display='none'"
-        />
-      </div>
-
-      <!-- Info strip -->
-      <div class="p-3">
-        <div class="flex flex-wrap gap-1 mb-1.5">
-          ${srcBadge}
-          <span class="px-1.5 py-0.5 rounded text-xs font-body border" style="border-color:#3a2e1a;color:#c8b898;">${escHtml(styleLabel)}</span>
+      <div class="art-plate" onclick="openLightbox('${escHtml(item.id)}')">
+        <div class="art-arch">
+          <img src="${escHtml(item.image_url)}" alt="${escHtml(snippet || 'Folio')}" loading="lazy" onerror="this.style.display='none'"/>
         </div>
-        <p class="font-body text-xs text-cream-dim leading-relaxed line-clamp-2">${escHtml(promptSnip)}</p>
-      </div>
-
-      <!-- Hover overlay -->
-      <div class="card-overlay absolute inset-0 flex items-center justify-center rounded-xl"
-           style="background:rgba(5,3,1,0.55);pointer-events:none;">
-        <div class="text-center">
-          <div class="text-3xl mb-2">🔍</div>
-          <p class="font-display text-sm text-cream font-semibold">View Artwork</p>
+        <div class="plate-caption">${escHtml(snippet || (isGen ? 'Generated artwork' : 'Transformed photograph'))}</div>
+        <div class="plate-meta">
+          <span class="plate-era-dot dot-${style}"></span>
+          <span>folio no. ${idxNum}</span>
+          <span style="margin-left:auto;font-size:10px;opacity:.65;letter-spacing:.18em;">${styleLabel}</span>
         </div>
-      </div>
-    </div>`;
+      </div>`;
   }).join('');
 }
 
-// ── Filter ───────────────────────────────────────────────────────────────
+// ── Filter ────────────────────────────────────────────────────────────────
 function setFilter(mode) {
   filterMode = mode;
   document.querySelectorAll('.filter-chip').forEach(el => {
@@ -350,63 +364,56 @@ function setFilter(mode) {
   renderCards();
 }
 
-// ── Lightbox ─────────────────────────────────────────────────────────────
+// ── Lightbox ──────────────────────────────────────────────────────────────
 function openLightbox(id) {
   const item = allItems.find(i => i.id === id);
   if (!item) return;
-
   activeLbId   = id;
   activeLbUrl  = item.image_url;
   activeLbItem = item;
 
   document.getElementById('lb-image').src = item.image_url;
 
-  const isGen = item.source_type === 'generate';
+  const isGen    = item.source_type === 'generate';
   const srcBadge = document.getElementById('lb-source-badge');
-  if (isGen) {
-    srcBadge.textContent = 'Generated';
-    srcBadge.style.cssText = 'background:rgba(161,103,6,0.35);color:#f0cc58;border:1px solid rgba(212,168,42,0.3);padding:0.25rem 0.5rem;border-radius:9999px;font-size:0.7rem;';
-  } else {
-    srcBadge.textContent = 'Transformed';
-    srcBadge.style.cssText = 'background:rgba(13,110,110,0.3);color:#6ee7b7;border:1px solid rgba(13,110,110,0.4);padding:0.25rem 0.5rem;border-radius:9999px;font-size:0.7rem;';
-  }
+  srcBadge.textContent = isGen ? 'Generated' : 'Transformed';
+  srcBadge.className   = 'lb-badge ' + (isGen ? 'gen' : 'tr');
 
-  const styleLabel = item.style_preset
-    ? item.style_preset.charAt(0).toUpperCase() + item.style_preset.slice(1)
-    : '';
-  document.getElementById('lb-style-badge').textContent = styleLabel;
+  const style = item.style_preset || 'akbari';
+  document.getElementById('lb-style-badge').textContent = STYLE_LABELS[style] || style;
+  document.getElementById('lb-prompt-title').textContent = item.prompt
+    ? (item.prompt.length > 50 ? item.prompt.slice(0, 47) + '…' : item.prompt)
+    : 'Folio';
   document.getElementById('lb-prompt').textContent = item.prompt || '';
 
-  // Reset delete area
   resetLbDelete();
 
-  const lb = document.getElementById('lightbox');
-  lb.classList.remove('hidden');
-  lb.classList.add('lb-enter');
+  document.getElementById('lightbox').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
 
 function closeLightbox() {
-  document.getElementById('lightbox').classList.add('hidden');
+  document.getElementById('lightbox').classList.remove('open');
   document.body.style.overflow = '';
-  activeLbId   = null;
-  activeLbUrl  = null;
-  activeLbItem = null;
+  activeLbId = activeLbUrl = activeLbItem = null;
 }
 
+document.getElementById('lightbox').addEventListener('click', (e) => {
+  if (e.target.id === 'lightbox') closeLightbox();
+});
+
 function resetLbDelete() {
-  const area = document.getElementById('lb-delete-area');
-  area.innerHTML = `<button id="lb-delete-btn" onclick="lbDeleteConfirm()" class="icon-btn danger" title="Delete">🗑</button>`;
+  document.getElementById('lb-delete-area').innerHTML =
+    `<button id="lb-delete-btn" onclick="lbDeleteConfirm()" class="icon-btn danger" title="Delete">🗑</button>`;
 }
 
 function lbDeleteConfirm() {
-  const area = document.getElementById('lb-delete-area');
-  area.innerHTML = `
-    <span class="font-body text-xs text-cream-dim mr-1">Delete?</span>
-    <button onclick="lbDeleteExecute()" class="px-3 py-1 rounded-lg text-xs font-display font-semibold transition-colors duration-200"
-            style="background:#7f1d1d;color:#fca5a5;border:1px solid #ef4444;">Yes</button>
-    <button onclick="resetLbDelete()" class="px-3 py-1 rounded-lg text-xs font-display font-semibold border transition-colors duration-200 ml-1"
-            style="border-color:#3a2e1a;color:#c8b898;">No</button>`;
+  document.getElementById('lb-delete-area').innerHTML = `
+    <span style="font-family:'Spectral',serif;font-size:12px;color:var(--ivory-dim);margin-right:6px;">Delete?</span>
+    <button onclick="lbDeleteExecute()"
+            style="padding:6px 14px;border-radius:999px;font-family:'Fraunces',serif;font-style:italic;font-size:12px;background:#7f1d1d;color:#fca5a5;border:1px solid #ef4444;cursor:pointer;">Yes</button>
+    <button onclick="resetLbDelete()"
+            style="padding:6px 14px;border-radius:999px;font-family:'Fraunces',serif;font-style:italic;font-size:12px;background:transparent;color:var(--ivory-dim);border:1px solid rgba(201,150,43,.28);cursor:pointer;margin-left:4px;">No</button>`;
 }
 
 async function lbDeleteExecute() {
@@ -419,14 +426,13 @@ async function lbDeleteExecute() {
     renderCards();
   } else {
     const data = await resp.json().catch(() => ({}));
-    showModal('error', data.detail || 'Failed to delete artwork. Please try again.');
+    showModal('error', data.detail || 'Failed to delete. Please try again.');
   }
 }
 
 async function lbDownload() {
   if (!activeLbUrl) return;
-  const filename = `mughal-art-${activeLbId ? activeLbId.slice(0, 8) : Date.now()}.png`;
-  await downloadImage(activeLbUrl, filename);
+  await downloadImage(activeLbUrl, `mughal-art-${activeLbId ? activeLbId.slice(0,8) : Date.now()}.png`);
 }
 
 // ── Re-transform modal ────────────────────────────────────────────────────
@@ -435,41 +441,18 @@ function openRetransform() {
   document.getElementById('rt-thumb').src = activeLbItem.image_url;
   document.getElementById('rt-progress').classList.add('hidden');
   selectRtStyle(activeLbItem.style_preset || 'akbari');
-
-  const modal = document.getElementById('retransform-modal');
-  modal.classList.remove('hidden');
-  // Reset animation
-  const inner = modal.querySelector('div');
-  inner.classList.remove('modal-enter');
-  void inner.offsetWidth;
-  inner.classList.add('modal-enter');
+  document.getElementById('retransform-modal').classList.add('open');
 }
-
 function closeRetransform() {
-  document.getElementById('retransform-modal').classList.add('hidden');
+  document.getElementById('retransform-modal').classList.remove('open');
 }
-
 function closeRetransformIfBg(e) {
-  if (e.target === document.getElementById('retransform-modal')) closeRetransform();
+  if (e.target.id === 'retransform-modal') closeRetransform();
 }
-
 function selectRtStyle(style) {
   rtStyle = style;
-  ['akbari', 'jahangiri', 'shahjahani'].forEach(s => {
-    const bar  = document.getElementById(`rt-${s}-bar`);
-    const card = document.querySelector(`#retransform-modal [data-style="${s}"]`);
-    if (!card) return;
-    if (s === style) {
-      card.style.borderColor = '#d4a82a';
-      card.style.background  = '#2a2318';
-      card.style.boxShadow   = '0 0 0 1px rgba(212,168,42,0.3)';
-      if (bar) bar.style.opacity = '1';
-    } else {
-      card.style.borderColor = '#3a2e1a';
-      card.style.background  = '#231e14';
-      card.style.boxShadow   = 'none';
-      if (bar) bar.style.opacity = '0';
-    }
+  document.querySelectorAll('.style-card-rt').forEach(card => {
+    card.classList.toggle('selected', card.dataset.style === style);
   });
 }
 
@@ -480,8 +463,7 @@ async function applyRetransform() {
   const bar  = document.getElementById('rt-progress-bar');
 
   prog.classList.remove('hidden');
-  btn.disabled = true;
-  btn.style.opacity = '0.6';
+  btn.disabled = true; btn.style.opacity = '0.6';
   bar.style.width = '20%';
 
   let imageBlob;
@@ -491,9 +473,8 @@ async function applyRetransform() {
     bar.style.width = '45%';
   } catch (e) {
     prog.classList.add('hidden');
-    btn.disabled = false;
-    btn.style.opacity = '1';
-    showModal('error', 'Could not fetch the image for re-transformation. Please try again.', { title: 'Fetch Failed' });
+    btn.disabled = false; btn.style.opacity = '1';
+    showModal('error', 'Could not fetch the image for re-transformation.', { title: 'Fetch Failed' });
     return;
   }
 
@@ -505,50 +486,38 @@ async function applyRetransform() {
   try {
     const resp = await apiFetch('/api/transform', { method: 'POST', body: fd });
     if (!resp) return;
-
     const data = await resp.json();
     if (!resp.ok) {
       prog.classList.add('hidden');
       showModal('error', data.detail || 'Transformation failed. Please try again.');
       return;
     }
-
     bar.style.width = '100%';
     setTimeout(async () => {
-      closeRetransform();
-      closeLightbox();
-      await loadGallery();
-    }, 400);
-
+      closeRetransform(); closeLightbox(); await loadGallery();
+    }, 350);
   } catch (e) {
     prog.classList.add('hidden');
     showModal('error', 'An unexpected error occurred during re-transformation.');
   } finally {
-    btn.disabled = false;
-    btn.style.opacity = '1';
+    btn.disabled = false; btn.style.opacity = '1';
   }
 }
 
 // ── Keyboard shortcuts ────────────────────────────────────────────────────
-document.addEventListener('keydown', function(e) {
+document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
-    if (!document.getElementById('retransform-modal').classList.contains('hidden')) {
-      closeRetransform();
-    } else if (!document.getElementById('lightbox').classList.contains('hidden')) {
-      closeLightbox();
-    }
+    if (document.getElementById('retransform-modal').classList.contains('open')) closeRetransform();
+    else if (document.getElementById('lightbox').classList.contains('open'))     closeLightbox();
   }
 });
 
-// ── Helpers ──────────────────────────────────────────────────────────────
+// ── Escape html helper ────────────────────────────────────────────────────
 function escHtml(str) {
   if (!str) return '';
   return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 </script>
 {% endblock %}

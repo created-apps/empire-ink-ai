@@ -6,10 +6,10 @@
   <title>{% block title %}Empire & Ink{% endblock %}</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☽</text></svg>" />
 
-  <!-- Google Fonts -->
+  <!-- Fraunces + Cormorant Garamond + Spectral -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet" />
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -18,32 +18,26 @@
       theme: {
         extend: {
           colors: {
-            bg:      '#0d0a07',
-            surface: '#1a1510',
-            card:    '#231e14',
-            'card-hover': '#2a2318',
-            gold:    '#d4a82a',
-            'gold-light': '#f0cc58',
-            'gold-dim':   '#a07a18',
-            cream:   '#f0e4c8',
-            'cream-dim':  '#c8b898',
-            'gem-ruby':  '#8b1a2a',
-            'gem-teal':  '#0d6e6e',
-            'gem-indigo':'#2d3a8c',
-            border:  '#3a2e1a',
-            'border-gold': '#5a4a1a',
+            ink:           '#0a0604',
+            'ink-soft':    '#120c06',
+            ivory:         '#F4E9D0',
+            'ivory-dim':   '#D8C8A2',
+            parchment:     '#EADFC0',
+            gold:          '#C9962B',
+            'gold-bright': '#E8B942',
+            'gold-pale':   '#EED89A',
+            /* rasa palette */
+            'rasa-red':       '#7A1313', 'rasa-red-dk':    '#560808',
+            'rasa-green':     '#1E3A1F', 'rasa-green-dk':  '#0E2410',
+            'rasa-blue':      '#0F2342', 'rasa-blue-dk':   '#071528',
+            'rasa-maroon':    '#4A1724', 'rasa-maroon-dk': '#2E0D15',
+            'rasa-olive':     '#3F3B1F', 'rasa-olive-dk':  '#24220F',
+            'rasa-coral':     '#C25549',
           },
           fontFamily: {
-            display: ['"Playfair Display"', 'Georgia', 'serif'],
-            body:    ['"Crimson Text"', 'Georgia', 'serif'],
-          },
-          boxShadow: {
-            'gold-sm': '0 1px 8px rgba(212,168,42,0.25)',
-            'gold-md': '0 4px 20px rgba(212,168,42,0.3)',
-            'gold-lg': '0 8px 40px rgba(212,168,42,0.35)',
-          },
-          backgroundImage: {
-            'arch-pattern': "url(\"data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0 Q28 8 28 20 Q28 32 20 40 Q12 32 12 20 Q12 8 20 0Z' fill='none' stroke='%23d4a82a' stroke-width='0.4' opacity='0.08'/%3E%3C/svg%3E\")",
+            display: ['"Fraunces"', '"Cormorant Garamond"', 'Georgia', 'serif'],
+            serif:   ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            body:    ['"Spectral"', 'Georgia', 'serif'],
           },
         },
       },
@@ -51,56 +45,276 @@
   </script>
 
   <style>
-    body { background-color: #0d0a07; color: #f0e4c8; font-family: 'Crimson Text', Georgia, serif; }
-    h1, h2, h3, h4, h5 { font-family: 'Playfair Display', Georgia, serif; }
-
-    /* Gold gradient text utility */
-    .text-gold-gradient {
-      background: linear-gradient(135deg, #d4a82a 0%, #f0cc58 50%, #d4a82a 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    :root{
+      --ivory:#F4E9D0;
+      --ivory-dim:#D8C8A2;
+      --parchment:#EADFC0;
+      --ink:#0a0604;
+      --ink-soft:#120c06;
+      --gold:#C9962B;
+      --gold-bright:#E8B942;
+      --gold-pale:#EED89A;
+      --rasa-red:#7A1313;      --rasa-red-dk:#560808;
+      --rasa-green:#1E3A1F;    --rasa-green-dk:#0E2410;
+      --rasa-blue:#0F2342;     --rasa-blue-dk:#071528;
+      --rasa-maroon:#4A1724;   --rasa-maroon-dk:#2E0D15;
+      --rasa-olive:#3F3B1F;    --rasa-olive-dk:#24220F;
+      --rasa-coral:#C25549;
     }
 
-    /* Shimmer skeleton animation */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--ink);
+      color: var(--ivory);
+      font-family: 'Spectral', Georgia, serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, h4, h5 { font-family: 'Fraunces', 'Cormorant Garamond', Georgia, serif; font-weight: 400; }
+    ::selection { background: var(--gold); color: var(--ink); }
+
+    /* ── Paper grain texture ────────────────────────────────────────────── */
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      pointer-events: none; z-index: 9999; opacity: 0.05;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 600 600' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ── Scrollbar ──────────────────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0a0604; }
+    ::-webkit-scrollbar-thumb { background: #3a2818; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+    /* ── Top navbar ─────────────────────────────────────────────────────── */
+    .ei-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10,6,4,0.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(201,150,43,0.22);
+    }
+    .ei-nav-inner {
+      max-width: 1400px; margin: 0 auto; padding: 12px 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+    }
+    .brand-tag { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .brand-seal {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, var(--gold-bright), var(--gold) 55%, #8a6312 100%);
+      display: grid; place-items: center;
+      color: var(--ink); font-family: 'Fraunces', serif; font-weight: 600; font-size: 15px;
+      box-shadow: 0 0 0 1px rgba(201,150,43,0.5), 0 2px 14px rgba(201,150,43,0.35);
+      flex-shrink: 0;
+    }
+    .brand-tag h1 {
+      font-family: 'Fraunces', serif; font-size: 17px; letter-spacing: 0.02em;
+      color: var(--ivory); font-style: italic; font-weight: 500; line-height: 1;
+    }
+    .brand-tag h1 em { color: var(--gold); font-style: italic; padding: 0 0.05em; }
+    .brand-tag small {
+      font-family: 'Spectral', serif; font-size: 10px; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--gold); opacity: 0.7; display: block; margin-top: 2px;
+    }
+
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-link {
+      padding: 8px 16px; border-radius: 7px;
+      font-family: 'Fraunces', serif; font-size: 13.5px; font-style: italic;
+      color: var(--ivory-dim); text-decoration: none; transition: all 0.22s ease;
+      letter-spacing: 0.01em;
+    }
+    .nav-link:hover { color: var(--ivory); background: rgba(201,150,43,0.06); }
+    .nav-link.active { color: var(--gold-bright); }
+
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+    .nav-email {
+      font-family: 'Spectral', serif; font-size: 12px; color: var(--ivory-dim);
+      opacity: 0.55; max-width: 160px; overflow: hidden; text-overflow: ellipsis;
+      white-space: nowrap; letter-spacing: 0.02em;
+    }
+    .nav-signout {
+      padding: 7px 16px; border-radius: 999px;
+      font-family: 'Fraunces', serif; font-size: 13px; font-style: italic;
+      background: transparent; color: var(--ivory-dim);
+      border: 1px solid rgba(201,150,43,0.28); cursor: pointer;
+      transition: all 0.22s ease;
+    }
+    .nav-signout:hover { color: var(--ivory); border-color: var(--gold); background: rgba(201,150,43,0.06); }
+
+    /* ── Buttons ─────────────────────────────────────────────────────────── */
+    .btn-gold {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 13px 28px; border-radius: 999px;
+      font-family: 'Fraunces', serif; font-size: 14px; font-weight: 500;
+      letter-spacing: 0.04em;
+      background: linear-gradient(135deg, #b48422, var(--gold) 40%, var(--gold-bright) 70%, var(--gold));
+      color: var(--ink); border: none; cursor: pointer;
+      box-shadow: 0 4px 22px rgba(201,150,43,0.32), inset 0 1px 0 rgba(255,255,255,0.3);
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
+      text-decoration: none;
+    }
+    .btn-gold:hover { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(232,185,66,0.48), inset 0 1px 0 rgba(255,255,255,0.4); }
+    .btn-gold:active { transform: scale(0.97); }
+    .btn-gold:disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 12px 26px; border-radius: 999px;
+      font-family: 'Fraunces', serif; font-size: 14px; font-weight: 500;
+      background: transparent; color: var(--ivory);
+      border: 1px solid rgba(201,150,43,0.55); cursor: pointer; text-decoration: none;
+      transition: all 0.22s ease;
+    }
+    .btn-ghost:hover { border-color: var(--gold-bright); background: rgba(201,150,43,0.08); color: var(--gold-pale); }
+
+    /* ── Form input ──────────────────────────────────────────────────────── */
+    .input-ornate {
+      width: 100%; padding: 13px 16px;
+      background: rgba(20,14,8,0.7); border: 1px solid rgba(201,150,43,0.28);
+      border-radius: 10px; color: var(--ivory);
+      font-family: 'Spectral', serif; font-size: 14.5px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .input-ornate:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,150,43,0.15); }
+    .input-ornate::placeholder { color: rgba(216,200,162,0.35); font-style: italic; }
+    textarea.input-ornate { resize: none; min-height: 140px; line-height: 1.65; }
+
+    /* ── Section titles ──────────────────────────────────────────────────── */
+    .section-title {
+      font-family: 'Fraunces', serif; font-size: clamp(28px,4vw,42px);
+      font-weight: 400; font-style: italic; color: var(--ivory);
+      text-align: center; letter-spacing: -0.005em;
+    }
+    .section-eyebrow {
+      font-family: 'Spectral', serif; font-size: 11px; letter-spacing: 0.26em;
+      text-transform: uppercase; color: var(--gold); opacity: 0.7;
+      margin-bottom: 12px; text-align: center;
+    }
+
+    /* ── Ornament rule ───────────────────────────────────────────────────── */
+    .ornament-rule { display: flex; align-items: center; justify-content: center; gap: 10px; opacity: 0.5; }
+    .ornament-rule .line { height: 1px; width: 48px; background: linear-gradient(90deg, transparent, var(--gold)); }
+    .ornament-rule .line.r { background: linear-gradient(90deg, var(--gold), transparent); }
+    .ornament-rule .dot { color: var(--gold); font-size: 11px; }
+
+    /* ── Rasa eyebrow + title (shared) ───────────────────────────────────── */
+    .rasa-eyebrow {
+      font-family: 'Fraunces', serif; font-style: italic; font-weight: 400;
+      font-size: 15px; letter-spacing: 0.01em;
+      color: var(--gold-pale); opacity: 0.85; margin-bottom: 4px;
+    }
+    .rasa-title {
+      font-family: 'Fraunces', serif; font-weight: 600;
+      font-size: clamp(22px, 2.6vw, 30px);
+      color: var(--ivory); letter-spacing: 0.005em;
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 12px;
+    }
+    .rasa-title::before {
+      content: '}'; font-weight: 300; font-size: 1.1em;
+      color: var(--gold-pale); opacity: 0.7; margin-right: -2px;
+    }
+    .rasa-body {
+      font-family: 'Spectral', serif; font-size: 14.5px; line-height: 1.65;
+      color: rgba(244,233,208,0.68); max-width: 420px;
+    }
+    .rasa-cta {
+      margin-top: 20px;
+      display: inline-flex; align-items: center; gap: 9px;
+      font-family: 'Fraunces', serif; font-style: italic; font-size: 14px;
+      color: var(--gold-pale); text-decoration: none; cursor: pointer;
+      border-bottom: 1px solid rgba(238,216,154,0.4);
+      padding-bottom: 3px; width: max-content;
+      transition: all 0.25s ease;
+    }
+    .rasa-cta:hover { color: var(--gold-bright); gap: 14px; border-bottom-color: var(--gold-bright); }
+
+    /* Rasa band backgrounds */
+    .band-red    { background: linear-gradient(135deg, var(--rasa-red-dk), var(--rasa-red) 60%, #8a1818); }
+    .band-green  { background: linear-gradient(135deg, var(--rasa-green-dk), var(--rasa-green) 60%, #2b4a2d); }
+    .band-blue   { background: linear-gradient(135deg, var(--rasa-blue-dk), var(--rasa-blue) 60%, #1a3560); }
+    .band-maroon { background: linear-gradient(135deg, var(--rasa-maroon-dk), var(--rasa-maroon) 60%, #63203a); }
+    .band-olive  { background: linear-gradient(135deg, var(--rasa-olive-dk), var(--rasa-olive) 60%, #57502d); }
+
+    /* Jaali arch tile texture overlay */
+    .jaali-overlay {
+      position: absolute; inset: 0; pointer-events: none; opacity: 0.85;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 4 Q50 22 50 50 Q50 78 30 96 Q10 78 10 50 Q10 22 30 4Z' fill='none' stroke='%23E8B942' stroke-width='.5' opacity='.07'/%3E%3C/svg%3E");
+    }
+
+    /* ── Animations ──────────────────────────────────────────────────────── */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .fade-up   { animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) forwards; opacity: 0; }
+    .fade-up-1 { animation-delay: 0.08s; }
+    .fade-up-2 { animation-delay: 0.16s; }
+    .fade-up-3 { animation-delay: 0.24s; }
+    .fade-up-4 { animation-delay: 0.32s; }
+    .fade-up-5 { animation-delay: 0.40s; }
+    .fade-in   { animation: fadeIn 0.45s ease forwards; opacity: 0; }
+
+    /* ── Filter chip ─────────────────────────────────────────────────────── */
+    .chip {
+      padding: 8px 18px; border-radius: 999px;
+      border: 1px solid rgba(201,150,43,0.3); background: transparent;
+      color: var(--ivory-dim);
+      font-family: 'Fraunces', serif; font-style: italic; font-size: 13px;
+      cursor: pointer; transition: all 0.2s ease;
+    }
+    .chip:hover { color: var(--ivory); border-color: rgba(201,150,43,0.55); }
+    .chip.active {
+      background: linear-gradient(135deg, var(--gold), var(--gold-bright));
+      color: var(--ink); border-color: transparent; font-weight: 500;
+    }
+
+    /* ── Era plate dots (gallery) ────────────────────────────────────────── */
+    .plate-era-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+    .dot-akbari    { background: #c23434; }
+    .dot-jahangiri { background: #6bb77a; }
+    .dot-shahjahani{ background: #5a8ed2; }
+
+    /* ── Skeleton shimmer ────────────────────────────────────────────────── */
     @keyframes shimmer {
       0%   { background-position: -800px 0; }
-      100% { background-position: 800px 0; }
+      100% { background-position:  800px 0; }
     }
     .skeleton {
-      background: linear-gradient(90deg, #1a1510 25%, #2a2318 50%, #1a1510 75%);
+      background: linear-gradient(90deg, #120c06 25%, #1c1409 50%, #120c06 75%);
       background-size: 800px 100%;
       animation: shimmer 1.6s infinite linear;
     }
 
-    /* Custom scrollbar */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #1a1510; }
-    ::-webkit-scrollbar-thumb { background: #5a4a1a; border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: #d4a82a; }
-
-    /* Ornamental divider */
-    .ornament::before, .ornament::after {
-      content: '❧';
-      color: #d4a82a;
-      opacity: 0.5;
-      margin: 0 0.75rem;
-      font-size: 0.9em;
+    /* ── Modal scale-in ──────────────────────────────────────────────────── */
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.93) translateY(10px); }
+      to   { opacity: 1; transform: scale(1)    translateY(0); }
     }
+    .modal-enter { animation: modalIn 0.24s cubic-bezier(0.22,1,0.36,1) forwards; }
 
-    /* Transition utilities */
-    .transition-card { transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease; }
-    .transition-card:hover { transform: translateY(-3px); }
-
-    /* Input focus gold ring */
-    input:focus, textarea:focus, select:focus {
-      outline: none;
-      border-color: #d4a82a !important;
-      box-shadow: 0 0 0 2px rgba(212,168,42,0.2);
+    /* ── Icon button ─────────────────────────────────────────────────────── */
+    .icon-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 2.25rem; height: 2.25rem;
+      border-radius: 0.5rem;
+      border: 1px solid rgba(201,150,43,0.35);
+      background: rgba(20,14,8,0.85);
+      color: var(--ivory-dim); cursor: pointer;
+      transition: all 0.2s ease; font-size: 1rem;
+      backdrop-filter: blur(4px);
     }
+    .icon-btn:hover { border-color: var(--gold-bright); color: var(--gold-pale); background: rgba(28,20,9,0.95); }
+    .icon-btn.danger:hover { border-color: #ef4444; color: #fca5a5; }
 
-    /* Button press effect */
-    .btn-press:active { transform: scale(0.97); }
+    /* ── Footer ──────────────────────────────────────────────────────────── */
+    .site-footer { padding: 36px 24px 30px; text-align: center; border-top: 1px solid rgba(201,150,43,0.15); }
+    .site-footer p { font-family: 'Spectral', serif; font-size: 12px; color: var(--ivory-dim); opacity: 0.45; letter-spacing: 0.08em; }
+
+    /* ── Responsive ──────────────────────────────────────────────────────── */
+    @media (max-width: 740px) {
+      .nav-links { display: none; }
+    }
   </style>
 
   {% block extra_head %}{% endblock %}
@@ -109,118 +323,87 @@
 <body class="min-h-full flex flex-col">
 
   <!-- ── Sticky Navbar ──────────────────────────────────────────────────── -->
-  <nav id="navbar" class="sticky top-0 z-40 border-b border-border" style="background:rgba(13,10,7,0.92);backdrop-filter:blur(12px);">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
+  <nav class="ei-nav">
+    <div class="ei-nav-inner">
 
-        <!-- Logo -->
-        <a href="/" class="flex items-center gap-2 group">
-          <span class="text-2xl" style="filter:drop-shadow(0 0 6px rgba(212,168,42,0.6));">☽</span>
-          <span class="font-display font-semibold text-lg text-gold-gradient tracking-wide">Empire &amp; Ink</span>
-        </a>
-
-        <!-- Nav links -->
-        <div class="flex items-center gap-1 sm:gap-2">
-          <a href="/studio" id="nav-studio"
-             class="px-3 py-1.5 rounded-md text-sm font-body text-cream-dim hover:text-cream hover:bg-surface transition-colors duration-200">
-            Studio
-          </a>
-          <a href="/gallery" id="nav-gallery"
-             class="px-3 py-1.5 rounded-md text-sm font-body text-cream-dim hover:text-cream hover:bg-surface transition-colors duration-200">
-            Gallery
-          </a>
-
-          <!-- Divider -->
-          <span class="hidden sm:block text-border-gold mx-1">|</span>
-
-          <!-- User email -->
-          <span id="nav-email" class="hidden sm:block text-xs font-body text-cream-dim max-w-[160px] truncate"></span>
-
-          <!-- Sign Out -->
-          <button onclick="logout()"
-                  class="ml-1 px-3 py-1.5 rounded-md text-sm font-body text-cream-dim hover:text-gold border border-transparent hover:border-border-gold transition-colors duration-200">
-            Sign Out
-          </button>
+      <a href="/" class="brand-tag">
+        <div class="brand-seal">E</div>
+        <div>
+          <h1>Empire <em>&amp;</em> Ink</h1>
+          <small>ai mughal miniatures</small>
         </div>
+      </a>
+
+      <div class="nav-links">
+        <a href="/studio"  id="nav-studio"  class="nav-link">Studio</a>
+        <a href="/gallery" id="nav-gallery" class="nav-link">Gallery</a>
+      </div>
+
+      <div class="nav-actions">
+        <span id="nav-email" class="nav-email"></span>
+        <button onclick="logout()" class="nav-signout">Sign Out</button>
       </div>
     </div>
-
-    <!-- Gold bottom line accent -->
-    <div class="h-px" style="background:linear-gradient(90deg,transparent,#d4a82a 30%,#f0cc58 50%,#d4a82a 70%,transparent);opacity:0.6;"></div>
+    <div class="h-px" style="background:linear-gradient(90deg,transparent,var(--gold) 30%,var(--gold-bright) 50%,var(--gold) 70%,transparent);opacity:0.4;"></div>
   </nav>
 
-  <!-- ── Main Content ───────────────────────────────────────────────────── -->
+  <!-- ── Main Content ─────────────────────────────────────────────────── -->
   <main class="flex-1 w-full">
     {% block content %}{% endblock %}
   </main>
 
-  <!-- ── Footer ────────────────────────────────────────────────────────── -->
-  <footer class="border-t border-border py-6 mt-auto">
-    <div class="max-w-7xl mx-auto px-4 text-center">
-      <p class="text-sm font-body text-cream-dim opacity-60">
-        <span class="text-gold opacity-70">☽</span>
-        Empire &amp; Ink — AI Mughal Miniature Studio
-        <span class="text-gold opacity-70">☽</span>
-      </p>
-      <p class="text-xs font-body text-cream-dim opacity-40 mt-1">CreatED Studios × Times of India</p>
-    </div>
+  <!-- ── Footer ──────────────────────────────────────────────────────── -->
+  <footer class="site-footer mt-auto">
+    <p>✦ &nbsp; Empire &amp; Ink — AI Mughal Miniature Studio &nbsp; ✦</p>
+    <p style="margin-top:6px;opacity:0.3;">CreatED Studios × Times of India</p>
   </footer>
 
-  <!-- ── Global Error / Info Modal ─────────────────────────────────────── -->
+  <!-- ── Global Error Modal ───────────────────────────────────────────── -->
   <div id="g-modal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4"
-       style="background:rgba(5,3,1,0.88);" onclick="if(event.target===this)closeModal()">
-    <div id="g-modal-box" class="modal-enter rounded-2xl border w-full max-w-md p-6 relative"
-         style="background:#1a1510;border-color:#3a2e1a;box-shadow:0 20px 60px rgba(0,0,0,0.85);">
-      <!-- Icon + title row -->
+       style="background:rgba(4,2,1,0.92);backdrop-filter:blur(6px);" onclick="if(event.target===this)closeModal()">
+    <div id="g-modal-box" class="modal-enter rounded-xl border w-full max-w-md p-6 relative"
+         style="background:#120c06;border-color:rgba(201,150,43,0.3);box-shadow:0 24px 64px rgba(0,0,0,0.88);">
       <div class="flex items-start gap-4 mb-4">
         <div id="g-modal-icon" class="text-3xl flex-shrink-0 mt-0.5">⚠</div>
         <div class="flex-1 min-w-0">
-          <h3 id="g-modal-title" class="font-display text-lg font-bold text-cream mb-1">Something went wrong</h3>
-          <p  id="g-modal-msg"   class="font-body text-sm text-cream-dim leading-relaxed"></p>
+          <h3 id="g-modal-title" class="font-display italic text-xl font-medium text-ivory mb-1.5">Something went wrong</h3>
+          <p  id="g-modal-msg" class="font-body text-sm leading-relaxed" style="color:rgba(216,200,162,0.7);"></p>
         </div>
-        <button onclick="closeModal()" class="flex-shrink-0 text-cream-dim hover:text-cream text-xl leading-none mt-0.5 ml-1">✕</button>
+        <button onclick="closeModal()" class="flex-shrink-0 text-xl leading-none mt-0.5 ml-1 transition-colors" style="color:var(--ivory-dim);">✕</button>
       </div>
-      <!-- Actions -->
       <div id="g-modal-actions" class="flex justify-end gap-2 mt-5"></div>
     </div>
   </div>
 
-  <!-- ── Session-expired Modal ───────────────────────────────────────────── -->
+  <!-- ── Session-expired Modal ───────────────────────────────────────── -->
   <div id="session-modal" class="hidden fixed inset-0 z-[210] flex items-center justify-center p-4"
-       style="background:rgba(5,3,1,0.92);">
-    <div class="modal-enter rounded-2xl border w-full max-w-sm p-6 text-center"
-         style="background:#1a1510;border-color:rgba(139,26,42,0.5);box-shadow:0 20px 60px rgba(0,0,0,0.85);">
-      <div class="text-4xl mb-3" style="filter:drop-shadow(0 0 10px rgba(212,168,42,0.4));">☽</div>
-      <h3 class="font-display text-lg font-bold text-cream mb-2">Session Expired</h3>
-      <p class="font-body text-sm text-cream-dim mb-5 leading-relaxed">Your session has ended. Please sign in again to continue.</p>
-      <a href="/login" class="inline-block w-full py-2.5 rounded-xl font-display font-semibold text-sm text-center transition-all duration-200"
-         style="background:linear-gradient(135deg,#a07a18,#d4a82a);color:#0d0a07;">
-        Sign In Again
-      </a>
+       style="background:rgba(4,2,1,0.94);">
+    <div class="modal-enter rounded-xl border w-full max-w-sm p-7 text-center"
+         style="background:#120c06;border-color:rgba(201,150,43,0.4);box-shadow:0 24px 64px rgba(0,0,0,0.9);">
+      <div class="text-5xl mb-4" style="filter:drop-shadow(0 0 12px rgba(232,185,66,0.45));color:var(--gold-pale);">☽</div>
+      <h3 class="font-display italic text-xl mb-2" style="color:var(--ivory);">Session expired</h3>
+      <p class="font-body text-sm mb-6 leading-relaxed" style="color:rgba(216,200,162,0.72);">Your session has ended. Please sign in again to continue creating.</p>
+      <a href="/login" class="btn-gold" style="width:100%;justify-content:center;">Sign In Again</a>
     </div>
   </div>
 
-  <style>
-    @keyframes modalIn { from { opacity:0; transform:scale(0.94) translateY(8px); } to { opacity:1; transform:scale(1) translateY(0); } }
-    .modal-enter { animation: modalIn 0.22s ease forwards; }
-  </style>
-
-  <!-- ── Shared JS ──────────────────────────────────────────────────────── -->
+  <!-- ── Shared JS ─────────────────────────────────────────────────────── -->
   <script src="/static/app.js"></script>
   <script>
-    // Highlight active nav link
     (function() {
       const path = window.location.pathname;
-      if (path === '/studio') document.getElementById('nav-studio').classList.add('text-gold');
-      if (path.startsWith('/gallery')) document.getElementById('nav-gallery').classList.add('text-gold');
+      const studio  = document.getElementById('nav-studio');
+      const gallery = document.getElementById('nav-gallery');
+      if (studio  && path === '/studio')          studio.classList.add('active');
+      if (gallery && path.startsWith('/gallery')) gallery.classList.add('active');
     })();
 
-    // Show user email in navbar + auth guard
     document.addEventListener('DOMContentLoaded', function() {
       Auth.initNavbar();
       if (!Auth.requireAuth()) return;
     });
   </script>
+
   {% block scripts %}{% endblock %}
 </body>
 </html>

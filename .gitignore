@@ -38,6 +38,28 @@ logs/
 .pytest_cache/
 .coverage
 htmlcov/
+
+# Claude / agent artifacts
 CLAUDE.md
 SKILL.md
 .claude/
+
+# ─── Old / unused project assets (do not push) ──────────────────────────────
+# Reference design materials (mood boards, prototype HTML, source images)
+Empire & Ink Design/
+
+# Documents (mentor lesson plan, FAQ brochure, dev setup guide)
+*.docx
+
+# Slide decks for sessions
+*.pptx
+pptx/
+
+# Student colab notebooks
+*.ipynb
+colabs/
+
+# Misc archives & exports
+*.zip
+*.tar.gz
+*.rar

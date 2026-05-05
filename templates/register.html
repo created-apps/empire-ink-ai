@@ -3,259 +3,335 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Create Account — Empire & Ink</title>
+  <title>Create Account — Empire &amp; Ink</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☽</text></svg>" />
 
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            bg:      '#0d0a07',
-            surface: '#1a1510',
-            card:    '#231e14',
-            gold:    '#d4a82a',
-            'gold-light': '#f0cc58',
-            'gold-dim':   '#a07a18',
-            cream:   '#f0e4c8',
-            'cream-dim':  '#c8b898',
-            border:  '#3a2e1a',
-            'border-gold': '#5a4a1a',
-          },
-          fontFamily: {
-            display: ['"Playfair Display"', 'Georgia', 'serif'],
-            body:    ['"Crimson Text"', 'Georgia', 'serif'],
-          },
-        },
-      },
-    }
-  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Spectral:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet" />
 
   <style>
-    body { background-color: #0d0a07; color: #f0e4c8; font-family: 'Crimson Text', Georgia, serif; }
-    h1, h2, h3 { font-family: 'Playfair Display', Georgia, serif; }
+    :root{
+      --ivory:#F4E9D0; --ivory-dim:#D8C8A2;
+      --ink:#0a0604; --ink-soft:#120c06;
+      --gold:#C9962B; --gold-bright:#E8B942; --gold-pale:#EED89A;
+      --rasa-green:#1E3A1F; --rasa-green-dk:#0E2410;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{
+      background:var(--ink); color:var(--ivory);
+      font-family:'Spectral',Georgia,serif;
+      min-height:100vh;
+    }
+    h1,h2,h3,h4{font-family:'Fraunces','Cormorant Garamond',Georgia,serif;font-weight:400;}
+    ::selection{background:var(--gold);color:var(--ink);}
 
-    .text-gold-gradient {
-      background: linear-gradient(135deg, #d4a82a 0%, #f0cc58 50%, #d4a82a 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    body::before{
+      content:''; position:fixed; inset:0; pointer-events:none; z-index:9999; opacity:.05;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 600 600' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     }
 
-    input:focus { outline: none; border-color: #d4a82a !important; box-shadow: 0 0 0 2px rgba(212,168,42,0.2); }
+    .gold-line-top{position:fixed;top:0;left:0;right:0;height:1px;z-index:60;
+      background:linear-gradient(90deg,transparent,var(--gold) 30%,var(--gold-bright) 50%,var(--gold) 70%,transparent);}
 
-    .arch-bg {
-      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 2 Q42 12 42 30 Q42 48 30 58 Q18 48 18 30 Q18 12 30 2Z' fill='none' stroke='%23d4a82a' stroke-width='0.5' opacity='0.07'/%3E%3C/svg%3E");
+    .auth-wrap{ min-height:100vh; display:grid; grid-template-columns:1.1fr 1fr; }
+    @media (max-width:900px){ .auth-wrap{grid-template-columns:1fr;} }
+
+    .auth-left{
+      position:relative; overflow:hidden;
+      padding:60px 48px;
+      display:flex; flex-direction:column; justify-content:space-between;
+      background:linear-gradient(150deg,var(--rasa-green) 0%, #0E2410 55%, #041308 100%);
+      min-height:420px;
+    }
+    .auth-left::before{
+      content:'';position:absolute;inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg width='60' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 4 Q50 22 50 50 Q50 78 30 96 Q10 78 10 50 Q10 22 30 4Z' fill='none' stroke='%23E8B942' stroke-width='.5' opacity='.09'/%3E%3C/svg%3E");
+      pointer-events:none;
+    }
+    .auth-brand{position:relative;z-index:1;display:flex;align-items:center;gap:14px;}
+    .brand-seal{
+      width:48px;height:48px;border-radius:50%;
+      background:radial-gradient(circle at 35% 30%, var(--gold-bright), var(--gold) 55%, #8a6312 100%);
+      display:grid;place-items:center;
+      color:var(--ink); font-family:'Fraunces',serif; font-weight:600; font-size:20px;
+      box-shadow:0 0 0 1px rgba(201,150,43,.5), 0 2px 14px rgba(201,150,43,.45);
+      flex-shrink:0;
+    }
+    .auth-brand-text h1{font-family:'Fraunces',serif;font-size:36px;font-style:italic;font-weight:400;color:var(--ivory);margin-bottom:4px;letter-spacing:-.01em;line-height:1;}
+    .auth-brand-text h1 em{color:var(--gold);font-style:italic;padding:0 .05em;}
+    .auth-brand-text p{font-family:'Spectral',serif;font-style:italic;color:rgba(244,233,208,.55);font-size:14px;margin-top:4px;}
+
+    .welcome-block{position:relative;z-index:1;}
+    .welcome-block .rasa-eyebrow{
+      font-family:'Fraunces',serif;font-style:italic;font-size:14px;
+      color:var(--gold-pale);opacity:.85;margin-bottom:6px;
+    }
+    .welcome-block h2{
+      font-family:'Fraunces',serif;font-style:italic;font-weight:400;
+      font-size:clamp(32px,4.5vw,46px);
+      color:var(--ivory);line-height:1.05;margin-bottom:12px;
+    }
+    .welcome-block p{
+      font-family:'Spectral',serif;font-size:15px;color:rgba(244,233,208,.65);
+      max-width:380px;line-height:1.65;
     }
 
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-    .fade-in { animation: fadeIn 0.5s ease forwards; }
+    .auth-illus{
+      position:relative;z-index:1; display:flex; align-items:center; justify-content:center;
+      flex:1; padding:24px 0;
+    }
+    .illus-frame{width:100%;max-width:340px;}
+    .illus-frame svg{width:100%;height:auto;display:block;}
 
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #1a1510; }
-    ::-webkit-scrollbar-thumb { background: #5a4a1a; border-radius: 3px; }
+    .ornament-rule{display:flex;align-items:center;gap:10px;opacity:.45;position:relative;z-index:1;}
+    .ornament-rule .line{height:1px;width:48px;background:linear-gradient(90deg,transparent,var(--gold));}
+    .ornament-rule .line.r{background:linear-gradient(90deg,var(--gold),transparent);}
+    .ornament-rule .dot{color:var(--gold);font-size:11px;}
+
+    .auth-right{
+      padding:60px 48px;
+      display:flex; align-items:center; justify-content:center;
+      background:var(--ink);
+    }
+    .auth-form{width:100%;max-width:380px;}
+    .auth-form h2{font-family:'Fraunces',serif;font-size:32px;font-weight:400;color:var(--ivory);margin-bottom:4px;}
+    .auth-form .sub{font-family:'Fraunces',serif;font-style:italic;font-size:15px;color:var(--ivory-dim);opacity:.65;margin-bottom:28px;}
+    .auth-field{margin-bottom:16px;}
+    .auth-field label{display:block;font-family:'Fraunces',serif;font-style:italic;font-size:13px;color:var(--gold-pale);opacity:.85;margin-bottom:6px;}
+    .input-ornate{
+      width:100%; padding:13px 16px;
+      background:rgba(20,14,8,.7); border:1px solid rgba(201,150,43,.28);
+      border-radius:10px; color:var(--ivory);
+      font-family:'Spectral',serif; font-size:14.5px;
+      transition:border-color .2s ease, box-shadow .2s ease;
+    }
+    .input-ornate:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,150,43,.15);}
+    .input-ornate::placeholder{color:rgba(216,200,162,.35);font-style:italic;}
+
+    .btn-gold{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      padding:13px 28px; border-radius:999px;
+      font-family:'Fraunces',serif; font-size:14px; font-weight:500; letter-spacing:.04em;
+      background:linear-gradient(135deg,#b48422,var(--gold) 40%,var(--gold-bright) 70%,var(--gold));
+      color:var(--ink); border:none; cursor:pointer;
+      box-shadow:0 4px 22px rgba(201,150,43,.32), inset 0 1px 0 rgba(255,255,255,.3);
+      transition:transform .15s ease, box-shadow .2s ease;
+      text-decoration:none; width:100%;
+    }
+    .btn-gold:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 28px rgba(232,185,66,.48), inset 0 1px 0 rgba(255,255,255,.4);}
+    .btn-gold:active:not(:disabled){transform:scale(.97);}
+    .btn-gold:disabled{opacity:.55;cursor:not-allowed;}
+
+    .auth-bottom{margin-top:22px;text-align:center;font-family:'Spectral',serif;font-size:13.5px;color:var(--ivory-dim);opacity:.7;}
+    .auth-bottom a{color:var(--gold-bright);text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(232,185,66,.35);}
+    .auth-bottom a:hover{text-decoration-color:var(--gold-bright);}
+
+    .error-msg{
+      display:none; padding:11px 14px; border-radius:10px;
+      background:rgba(139,26,42,.18); border:1px solid rgba(239,68,68,.4);
+      color:#fca5a5; font-family:'Spectral',serif; font-size:13px;
+      margin-bottom:16px;
+    }
+    .error-msg.show{display:block;}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+    .fade-up{animation:fadeUp .55s cubic-bezier(.22,1,.36,1) forwards;opacity:0;}
+    .fade-up-1{animation-delay:.08s;}
+    .fade-up-2{animation-delay:.16s;}
+    .fade-up-3{animation-delay:.24s;}
+
+    @media (max-width:900px){
+      .auth-left,.auth-right{padding:44px 28px;}
+      .auth-left{min-height:auto;}
+    }
   </style>
 </head>
 
-<body class="min-h-screen arch-bg flex flex-col items-center justify-center px-4 py-12">
+<body>
+<div class="gold-line-top"></div>
 
-  <!-- Decorative top border -->
-  <div class="fixed top-0 left-0 right-0 h-1" style="background:linear-gradient(90deg,transparent,#d4a82a 30%,#f0cc58 50%,#d4a82a 70%,transparent);"></div>
+<section class="auth-wrap">
 
-  <div class="fade-in w-full max-w-md">
+  <!-- ───────── LEFT: Brand + peacock illustration ───────── -->
+  <aside class="auth-left">
 
-    <!-- Decorative header -->
-    <div class="text-center mb-8">
-      <div class="text-6xl mb-3" style="filter:drop-shadow(0 0 20px rgba(212,168,42,0.5));line-height:1;">☽</div>
-      <h1 class="font-display text-4xl font-bold text-gold-gradient tracking-wide mb-2">Empire &amp; Ink</h1>
-      <p class="font-body text-cream-dim text-lg italic">The Royal Art Studio</p>
-      <div class="flex items-center justify-center gap-3 mt-4 opacity-60">
-        <div class="h-px w-16" style="background:linear-gradient(90deg,transparent,#d4a82a);"></div>
-        <span class="text-gold text-xs">✦</span>
-        <div class="h-px w-16" style="background:linear-gradient(90deg,#d4a82a,transparent);"></div>
+    <a href="/" class="auth-brand fade-up" style="text-decoration:none;">
+      <div class="brand-seal">E</div>
+      <div class="auth-brand-text">
+        <h1>Empire <em>&amp;</em> Ink</h1>
+        <p>Begin your royal journey</p>
+      </div>
+    </a>
+
+    <div class="welcome-block fade-up fade-up-1" style="margin:36px 0 24px;">
+      <div class="rasa-eyebrow">kārunyam · begin the rasa</div>
+      <h2>Begin the rasa</h2>
+      <p>Claim your folio in the nigārkhanā. Step into a studio shaped by the great courts of Agra and Lahore.</p>
+    </div>
+
+    <div class="auth-illus fade-up fade-up-2">
+      <div class="illus-frame" style="max-width:320px;">
+        <svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+          <!-- peacock arch -->
+          <path d="M40 300 L40 120 Q40 30 160 30 Q280 30 280 120 L280 300 Z" fill="none" stroke="#EED89A" stroke-width="1.5" opacity=".55"/>
+          <path d="M56 300 L56 130 Q56 50 160 50 Q264 50 264 130 L264 300 Z" fill="none" stroke="#EED89A" stroke-width=".9" opacity=".32"/>
+          <path d="M72 300 L72 140 Q72 70 160 70 Q248 70 248 140 L248 300 Z" fill="none" stroke="#EED89A" stroke-width=".6" opacity=".2"/>
+          <line x1="160" y1="30" x2="160" y2="10" stroke="#EED89A" stroke-width="1.2" opacity=".7"/>
+          <circle cx="160" cy="6" r="4" fill="none" stroke="#EED89A" opacity=".75"/>
+
+          <!-- peacock centered -->
+          <g transform="translate(160,210)">
+            <!-- fan rays -->
+            <g stroke="#EED89A" fill="none" stroke-width="1" opacity=".6">
+              <path d="M0 0 q-72 -50 -82 14"/>
+              <path d="M0 0 q-58 -56 -52 -8"/>
+              <path d="M0 0 q-30 -68 -22 -22"/>
+              <path d="M0 0 q0 -72 -8 -28"/>
+              <path d="M0 0 q0 -76 8 -28"/>
+              <path d="M0 0 q30 -68 22 -22"/>
+              <path d="M0 0 q58 -56 52 -8"/>
+              <path d="M0 0 q72 -50 82 14"/>
+            </g>
+            <!-- eye-spots on rays -->
+            <g fill="#EED89A" opacity=".55">
+              <circle cx="-78" cy="14" r="3"/>
+              <circle cx="-52" cy="-8" r="3"/>
+              <circle cx="-22" cy="-22" r="3"/>
+              <circle cx="-8" cy="-28" r="3"/>
+              <circle cx="8" cy="-28" r="3"/>
+              <circle cx="22" cy="-22" r="3"/>
+              <circle cx="52" cy="-8" r="3"/>
+              <circle cx="78" cy="14" r="3"/>
+            </g>
+            <g fill="#7d4a18" opacity=".75">
+              <circle cx="-78" cy="14" r="1.5"/>
+              <circle cx="-52" cy="-8" r="1.5"/>
+              <circle cx="-22" cy="-22" r="1.5"/>
+              <circle cx="-8" cy="-28" r="1.5"/>
+              <circle cx="8" cy="-28" r="1.5"/>
+              <circle cx="22" cy="-22" r="1.5"/>
+              <circle cx="52" cy="-8" r="1.5"/>
+              <circle cx="78" cy="14" r="1.5"/>
+            </g>
+            <!-- body -->
+            <ellipse cx="0" cy="14" rx="22" ry="15" fill="#F4E9D0"/>
+            <!-- neck -->
+            <path d="M10 0 Q22 -22 14 -32" stroke="#F4E9D0" stroke-width="6" fill="none" stroke-linecap="round"/>
+            <circle cx="14" cy="-34" r="6" fill="#F4E9D0"/>
+            <!-- crest -->
+            <path d="M12 -42 l1 -6 M16 -42 l2 -6 M18 -41 l4 -4" stroke="#F4E9D0" stroke-width="1.2" fill="none"/>
+            <!-- beak + eye -->
+            <path d="M18 -32 l8 -2" stroke="#1a0f06" stroke-width="1.5"/>
+            <circle cx="14" cy="-33" r="1" fill="#1a0f06"/>
+            <!-- legs -->
+            <rect x="-6" y="28" width="3" height="22" fill="#cfc3a0"/>
+            <rect x="3" y="28" width="3" height="22" fill="#cfc3a0"/>
+          </g>
+
+          <!-- ground -->
+          <line x1="40" y1="300" x2="280" y2="300" stroke="#EED89A" stroke-width="1" opacity=".6"/>
+          <line x1="40" y1="305" x2="280" y2="305" stroke="#EED89A" stroke-width=".5" opacity=".35"/>
+        </svg>
       </div>
     </div>
 
-    <!-- Form card -->
-    <div class="rounded-xl border p-8" style="background:#1a1510;border-color:#3a2e1a;box-shadow:0 8px 40px rgba(0,0,0,0.6),0 0 0 1px rgba(212,168,42,0.08);">
+    <div class="ornament-rule fade-up fade-up-3" style="justify-content:flex-start;margin-top:auto;">
+      <span class="line"></span>
+      <span class="dot">✦</span>
+      <span class="line r"></span>
+    </div>
+  </aside>
 
-      <h2 class="font-display text-2xl font-semibold text-cream mb-1">Join the Studio</h2>
-      <p class="font-body text-cream-dim text-base mb-6">Create your royal account</p>
+  <!-- ───────── RIGHT: Form ───────── -->
+  <div class="auth-right">
+    <form id="register-form" class="auth-form fade-up fade-up-1" novalidate>
+      <h2>Create your account</h2>
+      <p class="sub">The rasa awaits its painter.</p>
 
-      <!-- Error message -->
-      <div id="error-msg" class="hidden mb-4 px-4 py-3 rounded-lg border text-sm font-body"
-           style="background:rgba(139,26,42,0.2);border-color:rgba(139,26,42,0.6);color:#fca5a5;">
+      <div id="error-msg" class="error-msg"></div>
+
+      <div class="auth-field">
+        <label for="email">Email</label>
+        <input class="input-ornate" type="email" id="email" name="email" autocomplete="email" placeholder="you@empire-and-ink.art" required/>
+      </div>
+      <div class="auth-field">
+        <label for="password">Password</label>
+        <input class="input-ornate" type="password" id="password" name="password" autocomplete="new-password" placeholder="At least 6 characters" required/>
+      </div>
+      <div class="auth-field">
+        <label for="confirm">Confirm password</label>
+        <input class="input-ornate" type="password" id="confirm" name="confirm" autocomplete="new-password" placeholder="••••••••" required/>
       </div>
 
-      <!-- Success / confirmation message -->
-      <div id="success-msg" class="hidden mb-4 px-4 py-3 rounded-lg border text-sm font-body"
-           style="background:rgba(13,110,110,0.2);border-color:rgba(13,110,110,0.6);color:#6ee7b7;">
+      <button type="submit" id="submit-btn" class="btn-gold" style="margin-top:10px;">Begin Your Journey</button>
+
+      <div class="ornament-rule" style="margin:22px 0;justify-content:center;">
+        <span class="line"></span>
+        <span class="dot">✦</span>
+        <span class="line r"></span>
       </div>
 
-      <form id="register-form" novalidate>
-        <!-- Email -->
-        <div class="mb-4">
-          <label for="email" class="block text-sm font-body text-cream-dim mb-1.5">Email Address</label>
-          <input
-            type="email" id="email" name="email" autocomplete="email" required
-            placeholder="you@example.com"
-            class="w-full px-4 py-2.5 rounded-lg border font-body text-cream placeholder-cream-dim/40 text-base transition-colors duration-200"
-            style="background:#0d0a07;border-color:#3a2e1a;"
-          />
-        </div>
-
-        <!-- Password -->
-        <div class="mb-4">
-          <label for="password" class="block text-sm font-body text-cream-dim mb-1.5">Password</label>
-          <input
-            type="password" id="password" name="password" autocomplete="new-password" required
-            placeholder="At least 8 characters"
-            class="w-full px-4 py-2.5 rounded-lg border font-body text-cream placeholder-cream-dim/40 text-base transition-colors duration-200"
-            style="background:#0d0a07;border-color:#3a2e1a;"
-          />
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="mb-6">
-          <label for="confirm-password" class="block text-sm font-body text-cream-dim mb-1.5">Confirm Password</label>
-          <input
-            type="password" id="confirm-password" name="confirm_password" autocomplete="new-password" required
-            placeholder="••••••••"
-            class="w-full px-4 py-2.5 rounded-lg border font-body text-cream placeholder-cream-dim/40 text-base transition-colors duration-200"
-            style="background:#0d0a07;border-color:#3a2e1a;"
-          />
-        </div>
-
-        <!-- Submit -->
-        <button
-          type="submit" id="submit-btn"
-          class="w-full py-3 rounded-lg font-display font-semibold text-base tracking-wide transition-all duration-200 active:scale-95"
-          style="background:linear-gradient(135deg,#a07a18,#d4a82a,#f0cc58,#d4a82a);color:#0d0a07;box-shadow:0 4px 20px rgba(212,168,42,0.35);"
-          onmouseover="this.style.boxShadow='0 6px 28px rgba(212,168,42,0.5)'"
-          onmouseout="this.style.boxShadow='0 4px 20px rgba(212,168,42,0.35)'"
-        >
-          Create Account
-        </button>
-      </form>
-
-      <!-- Divider -->
-      <div class="flex items-center gap-3 my-6 opacity-40">
-        <div class="flex-1 h-px" style="background:#3a2e1a;"></div>
-        <span class="text-gold-dim text-xs">✦</span>
-        <div class="flex-1 h-px" style="background:#3a2e1a;"></div>
-      </div>
-
-      <!-- Login link -->
-      <p class="text-center font-body text-cream-dim text-base">
-        Already have an account?
-        <a href="/login" class="text-gold hover:text-gold-light transition-colors duration-200 ml-1">Sign in</a>
+      <p class="auth-bottom">
+        Already signed in? <a href="/login">Sign in</a>
       </p>
-    </div>
-
+    </form>
   </div>
 
-  <!-- Decorative bottom border -->
-  <div class="fixed bottom-0 left-0 right-0 h-1" style="background:linear-gradient(90deg,transparent,#d4a82a 30%,#f0cc58 50%,#d4a82a 70%,transparent);opacity:0.4;"></div>
+</section>
 
-  <script>
-    const Auth = {
-      getToken: () => localStorage.getItem('ei_token'),
-      setSession: (token, userId, email) => {
-        localStorage.setItem('ei_token', token);
-        localStorage.setItem('ei_user_id', userId);
-        localStorage.setItem('ei_email', email);
-      },
-    };
+<script>
+  const Auth = {
+    getToken: () => localStorage.getItem('ei_token'),
+    setSession: (token, userId, email) => {
+      localStorage.setItem('ei_token',   token);
+      localStorage.setItem('ei_user_id', userId);
+      localStorage.setItem('ei_email',   email);
+    },
+  };
 
-    // Redirect if already logged in
-    if (Auth.getToken()) {
-      window.location.href = '/studio';
-    }
+  if (Auth.getToken()) window.location.href = '/studio';
 
-    document.getElementById('register-form').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      const email    = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
-      const confirm  = document.getElementById('confirm-password').value;
-      const btn      = document.getElementById('submit-btn');
-      const errEl    = document.getElementById('error-msg');
-      const succEl   = document.getElementById('success-msg');
+  const form  = document.getElementById('register-form');
+  const errEl = document.getElementById('error-msg');
+  const btn   = document.getElementById('submit-btn');
 
-      errEl.classList.add('hidden');
-      succEl.classList.add('hidden');
+  function showErr(msg){ errEl.textContent = msg; errEl.classList.add('show'); }
 
-      // Validation
-      if (!email || !password || !confirm) {
-        showError('Please fill in all fields.');
-        return;
-      }
-      if (password.length < 8) {
-        showError('Password must be at least 8 characters.');
-        return;
-      }
-      if (password !== confirm) {
-        showError('Passwords do not match.');
-        return;
-      }
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errEl.classList.remove('show');
 
-      btn.disabled = true;
-      btn.textContent = 'Creating account…';
-      btn.style.opacity = '0.8';
+    const email    = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const confirm  = document.getElementById('confirm').value;
 
-      try {
-        const resp = await fetch('/api/auth/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password }),
-        });
+    if (!email || !password) { showErr('Please fill in all fields.'); return; }
+    if (password.length < 6)  { showErr('Password must be at least 6 characters.'); return; }
+    if (password !== confirm) { showErr('Passwords do not match.'); return; }
 
-        const data = await resp.json();
+    btn.disabled = true; btn.textContent = 'Creating account…';
 
-        if (!resp.ok) {
-          showError(data.detail || 'Registration failed. Please try again.');
-          return;
-        }
-
-        if (data.needs_confirmation) {
-          // Email confirmation required
-          succEl.textContent = 'Account created! Please check your email to confirm your address, then sign in.';
-          succEl.classList.remove('hidden');
-          document.getElementById('register-form').style.opacity = '0.5';
-          document.getElementById('register-form').style.pointerEvents = 'none';
-          setTimeout(() => { window.location.href = '/login'; }, 3500);
-          return;
-        }
-
-        // Immediate session — store and redirect
+    try {
+      const resp = await fetch('/api/auth/register', {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await resp.json();
+      if (!resp.ok) { showErr(data.detail || 'Registration failed.'); return; }
+      if (data.access_token) {
         Auth.setSession(data.access_token, data.user_id, data.email);
         window.location.href = '/studio';
-
-      } catch (err) {
-        showError('Network error. Please try again.');
-      } finally {
-        if (!succEl.classList.contains('hidden') === false) {
-          btn.disabled = false;
-          btn.textContent = 'Create Account';
-          btn.style.opacity = '1';
-        }
+      } else {
+        window.location.href = '/login?registered=1';
       }
-    });
-
-    function showError(msg) {
-      const el = document.getElementById('error-msg');
-      el.textContent = msg;
-      el.classList.remove('hidden');
-      document.getElementById('submit-btn').disabled = false;
-      document.getElementById('submit-btn').textContent = 'Create Account';
-      document.getElementById('submit-btn').style.opacity = '1';
+    } catch (err) {
+      showErr('Network error. Please try again.');
+    } finally {
+      btn.disabled = false; btn.textContent = 'Begin Your Journey';
     }
-  </script>
+  });
+</script>
 </body>
 </html>
